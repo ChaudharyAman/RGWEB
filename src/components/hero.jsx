@@ -25,23 +25,28 @@ export default function Hero() {
             transition={{ duration: 0.8, ease: "easeOut" }}
           >
             <div className="overflow-visible py-2">
-              <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-[1.25]">
+              <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
                 <span className="inline-flex items-center justify-center gap-x-5 whitespace-nowrap">
                   <span className="bg-linear-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
                     Technology
                   </span>
-                  <span className="w-3 h-3 rounded-full bg-gray-600 shrink-0" />
+
+                  {/* PERFECTLY CENTERED DOT */}
+                  <span className="relative top-[0.05em] w-3 h-3 rounded-full bg-gray-600 shrink-0" />
+
                   <span className="bg-linear-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
                     Talent
                   </span>
-                  <span className="w-3 h-3 rounded-full bg-gray-600 shrink-0" />
+
+                  {/* PERFECTLY CENTERED DOT */}
+                  <span className="relative top-[0.05em] w-3 h-3 rounded-full bg-gray-600 shrink-0" />
+
                   <span className="bg-linear-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
                     Transformation
                   </span>
                 </span>
               </h1>
             </div>
-
             <p className="text-lg md:text-xl text-gray-600 mb-10 max-w-3xl mx-auto">
               From vision to execution — enabling enterprises to scale through
               the right mix of people, platforms, and performance.

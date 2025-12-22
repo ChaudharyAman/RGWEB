@@ -21,7 +21,7 @@ import Footer from './components/footer'
 function App() {
   return (
      <div className="relative overflow-x-hidden">
-      <div className="fixed inset-0 -z-10 bg-gradient-to-b from-white via-blue-50 to-purple-50" />
+      <div className="fixed inset-0 -z-10 bg-linear-to-b from-white via-blue-50 to-purple-50" />
       <Navbar />
         <Hero />
         <About />
