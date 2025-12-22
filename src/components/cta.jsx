@@ -4,9 +4,9 @@ export default function CTA() {
   return (
     <section className="relative py-28 overflow-hidden bg-gray-50">
       {/* Logo-inspired soft background flows */}
-      <div className="absolute -top-40 -left-40 w-[520px] h-[520px] bg-cyan-300/30 rounded-full blur-3xl" />
-      <div className="absolute top-1/2 -right-40 w-[520px] h-[520px] bg-indigo-300/30 rounded-full blur-3xl" />
-      <div className="absolute -bottom-40 left-1/3 w-[520px] h-[520px] bg-fuchsia-300/30 rounded-full blur-3xl" />
+      <div className="absolute -top-40 -left-40 w-130 h-130 bg-cyan-300/30 rounded-full blur-3xl" />
+      <div className="absolute top-1/2 -right-40 w-130 h-130 bg-indigo-300/30 rounded-full blur-3xl" />
+      <div className="absolute -bottom-40 left-1/3 w-130 h-130 bg-fuchsia-300/30 rounded-full blur-3xl" />
 
       <div className="container mx-auto px-4 relative z-10">
         <div className="max-w-5xl mx-auto text-center">
@@ -17,7 +17,7 @@ export default function CTA() {
             viewport={{ once: true }}
             className="
               text-3xl md:text-4xl font-bold mb-6
-              bg-gradient-to-r
+              bg-linear-to-r
               from-cyan-500 via-indigo-500 to-fuchsia-500
               bg-clip-text text-transparent
             "
@@ -45,7 +45,7 @@ export default function CTA() {
                 px-12 py-4
                 rounded-xl
                 font-semibold text-lg text-white
-                bg-gradient-to-r
+                bg-linear-to-r
                 from-cyan-500 via-indigo-500 to-fuchsia-500
                 hover:shadow-xl hover:shadow-indigo-400/30
                 transition-all duration-200
@@ -134,7 +134,7 @@ export default function CTA() {
                   px-12 py-4
                   rounded-xl
                   font-semibold text-white
-                  bg-gradient-to-r
+                  bg-linear-to-r
                   from-cyan-500 via-indigo-500 to-fuchsia-500
                   hover:shadow-xl hover:shadow-fuchsia-400/30
                   transition-all duration-200

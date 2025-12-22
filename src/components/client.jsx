@@ -84,7 +84,7 @@ export default function Clients() {
                 transition={{ duration: 0.3, ease: "easeOut" }}
                 className="
                   max-h-12
-                  max-w-[140px]
+                  max-w-35
                   object-contain
                   grayscale
                   hover:grayscale-0
