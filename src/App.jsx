@@ -9,7 +9,7 @@ import Technologies from './components/technologies'
 import Talent from './components/talent'
 import Clients from './components/client'
 import CTA from './components/cta'
-import Footer from './components/footer'
+import Footer from './components/Footer'
 
 
 
