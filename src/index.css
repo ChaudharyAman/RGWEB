@@ -1,0 +1,106 @@
+@import "tailwindcss";
+
+/* ===========================
+   THEME TOKENS
+=========================== */
+@theme {
+  --color-brand-teal: #1FB6C1;
+  --color-brand-blue: #1E6FA8;
+  --color-brand-indigo: #2D2F8F;
+  --color-brand-purple: #7A3FA1;
+  --color-brand-pink: #C24A8E;
+  --color-brand-lime: #B6D63A;
+
+  --color-bg-main: #F6F8FB;
+  --color-bg-dark: #0B1020;
+
+  --color-text-primary: #0F172A;
+  --color-text-secondary: #475569;
+  --color-text-muted: #94A3B8;
+
+  --radius-xl: 1rem;
+  --radius-2xl: 1.25rem;
+
+  --shadow-glass: 0 8px 32px rgba(31,182,193,0.25);
+  --shadow-card: 0 10px 30px rgba(15,23,42,0.1);
+  --shadow-glow: 0 0 40px rgba(30,111,168,0.4);
+}
+
+/* ===========================
+   BASE
+=========================== */
+body {
+  @apply bg-[var(--color-bg-main)] text-[var(--color-text-primary)] antialiased;
+  font-family: Inter, system-ui, sans-serif;
+}
+
+/* ===========================
+   CUSTOM UTILITIES (v4 WAY)
+=========================== */
+
+@utility glass {
+  @apply backdrop-blur-xl border border-white/30
+         rounded-[var(--radius-2xl)]
+         shadow-[var(--shadow-glass)]
+         bg-[linear-gradient(135deg,rgba(255,255,255,0.75),rgba(255,255,255,0.45))];
+}
+
+@utility gradient-primary {
+  background: linear-gradient(
+    135deg,
+    #1FB6C1 0%,
+    #1E6FA8 35%,
+    #2D2F8F 70%
+  );
+}
+
+@utility gradient-secondary {
+  background: linear-gradient(
+    135deg,
+    #7A3FA1 0%,
+    #C24A8E 100%
+  );
+}
+
+@utility gradient-accent {
+  background: linear-gradient(
+    135deg,
+    #B6D63A 0%,
+    #1FB6C1 100%
+  );
+}
+
+@utility gradient-dark {
+  background: linear-gradient(
+    135deg,
+    #0B1020 0%,
+    #151A35 100%
+  );
+}
+
+@utility gradient-text {
+  background: linear-gradient(
+    135deg,
+    #1FB6C1,
+    #2D2F8F,
+    #C24A8E
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+@utility btn-primary {
+  @apply gradient-primary text-white font-semibold
+         px-7 py-3 rounded-[var(--radius-xl)]
+         transition-all duration-300
+         hover:shadow-[var(--shadow-glow)]
+         hover:-translate-y-0.5;
+}
+
+@utility section {
+  @apply py-24 px-6;
+}
+
+@utility container {
+  @apply max-w-7xl mx-auto;
+}
