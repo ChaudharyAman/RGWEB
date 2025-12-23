@@ -83,7 +83,7 @@ export default function Clients() {
                 whileHover={{ scale: 1.08 }}
                 transition={{ duration: 0.3, ease: "easeOut" }}
                 className="
-                  max-h-12
+                   max-h-20 md:max-h-25
                   max-w-35
                   object-contain
                   grayscale

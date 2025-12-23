@@ -36,31 +36,9 @@ export default function Navbar() {
 
   const navItems = [
     {
-      name: "About Us",
+      name: "Home",
       href: "#",
-      type: "dropdown",
-      items: [
-        { 
-          name: "About", 
-          description: "Forging Future Excellence with Innovation and Collective Expertise",
-          href: "#about"
-        },
-        { 
-          name: "Group Companies", 
-          description: "Strength in Unity",
-          href: "#group-companies"
-        },
-        { 
-          name: "Our Team", 
-          description: "Meet the Driving Force Behind Strawberry",
-          href: "#team"
-        },
-        { 
-          name: "Career", 
-          description: "Embark on a Journey of Growth and Impact",
-          href: "#career"
-        }
-      ]
+      type: "link",
     },
     {
       name: "Our Services",
@@ -119,9 +97,9 @@ export default function Navbar() {
       initial={{ y: -60, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.6 }}
-      className="sticky top-0 z-50 bg-white/70 backdrop-blur-xl border-b border-gray-200"
+      className="fixed w-full top-0 z-50 bg-white/70 backdrop-blur-xl border-b border-gray-200"
     >
-      <div className="container mx-auto  sm:px-6 lg:px-8">
+      <div className="container  mx-auto  sm:px-6 lg:px-8">
         <div className="flex items-center justify-between ">
           {/* Logo */}
             <a href="#" className="flex items-center p-1">
