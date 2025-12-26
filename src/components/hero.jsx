@@ -2,18 +2,18 @@ import { motion } from "framer-motion";
 
 export default function Hero() {
   return (
-    <section className="section relative py-20 md:py-32 overflow-x-hidden overflow-y-visible bg-white">
+    <section className="section relative py-20 md:py-32 overflow-x-hidden overflow-y-visible min-h-screen bg-white">
       {/* Floating Background Elements */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         <motion.div
           animate={{ y: [0, -30, 0] }}
           transition={{ repeat: Infinity, duration: 10 }}
-          className="absolute -top-32 -left-32 w-96 h-96 bg-linear-to-r from-blue-500/20 to-purple-600/20 rounded-full blur-3xl"
+          className="absolute -top-32 -left-32 w-96 h-96 bg-linear-to-r  rounded-full blur-3xl"
         />
         <motion.div
           animate={{ y: [0, 40, 0] }}
           transition={{ repeat: Infinity, duration: 12 }}
-          className="absolute -bottom-32 -right-32 w-96 h-96 bg-linear-to-r from-purple-500/20 to-pink-600/20 rounded-full blur-3xl"
+          className="absolute -bottom-32 -right-32 w-96 h-96 bg-linear-to-r rounded-full blur-3xl"
         />
       </div>
 
@@ -27,18 +27,18 @@ export default function Hero() {
             <div className="overflow-visible py-2">
               <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
                 <span className="inline-flex items-center justify-center gap-x-5 whitespace-nowrap">
-                  <span className="bg-linear-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                  <span className="bg-linear-to-r from-blue-600 to-purple-500 bg-clip-text text-transparent">
                     Technology
                   </span>
 
-                  {/* PERFECTLY CENTERED DOT */}
-                  <span className="relative top-[0.05em] w-3 h-3 rounded-full bg-gray-600 shrink-0" />
+                  {/* CENTERED DOT */}
+                  <span className="relative top-[0.05em] w-3 h-3 rounded-full bg-gray-600 shrink-0npm" />
 
-                  <span className="bg-linear-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                  <span className="bg-linear-to-r from-purple-500 to-purple-600 bg-clip-text text-transparent">
                     Talent
                   </span>
 
-                  {/* PERFECTLY CENTERED DOT */}
+                  {/* CENTERED DOT */}
                   <span className="relative top-[0.05em] w-3 h-3 rounded-full bg-gray-600 shrink-0" />
 
                   <span className="bg-linear-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
@@ -68,7 +68,7 @@ export default function Hero() {
               </a>
             </div>
 
-            {/* 👇 NARRATIVE HANDOFF */}
+            {/* NARRATIVE HANDOFF */}
             <p className="mt-16 text-sm text-gray-500 tracking-wide">
               Trusted by enterprises to deliver people, platforms, and outcomes.
             </p>

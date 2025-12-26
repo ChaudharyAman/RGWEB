@@ -86,7 +86,7 @@ export default function Navbar() {
       ]
     },
     {
-      name: "Let’s Talk ",
+      name: "Let’s Connect ",
       href: "#contact",
       type: "link"
     }
