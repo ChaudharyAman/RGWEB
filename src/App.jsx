@@ -21,12 +21,12 @@ function App() {
       <Navbar />
         <Hero />
         <About />
-        <Timeline />
+        {/* <Timeline /> */}
         <Services />
         <Solutions/>
-        <Talent />
+        {/* <Talent /> */}
         <Technologies />
-        <Clients />
+        {/* <Clients /> */}
         <CTA />
         <Footer />
     </div>

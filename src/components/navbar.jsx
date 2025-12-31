@@ -73,7 +73,7 @@ export default function Navbar() {
       href: "#services",
       type: "dropdown",
       items: [
-        { name: "Smart Talent-as-a-Service (TaaS)", href: "#talent-as-a-service" },
+        // { name: "Smart Talent-as-a-Service (TaaS)", href: "#talent-as-a-service" },
         { name: "Software Product Engineering", href: "#software-product-engineering" },
         { name: "Dedicated Software Teams", href: "#dedicated-teams" },
         { name: "QA & Testing", href: "#qa-testing" },
@@ -85,7 +85,7 @@ export default function Navbar() {
       ]
     },
     {
-      name: "Solutions",
+      name: "Our Solutions",
       href: "#solutions",
       type: "dropdown",
       items: [
@@ -117,7 +117,12 @@ export default function Navbar() {
       name: "Let's Connect",
       href: "#contact",
       type: "link"
-    }
+    },
+    {
+     name: "Carrers",
+     href: "#Career",
+     type: "link"
+   },
   ];
 
   return (

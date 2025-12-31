@@ -1,9 +1,11 @@
 import { motion } from "framer-motion";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faAsterisk } from "@fortawesome/free-solid-svg-icons";
 
 export default function Hero() {
   return (
     <section className="section relative mt-10 py-12 md:py-20 lg:py-32 overflow-x-hidden overflow-y-visible min-h-[80vh] md:min-h-screen bg-white">
-      {/* Floating Background Elements - Reduced on mobile */}
+      {/* Floating Background Elements */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         <motion.div
           animate={{ y: [0, -30, 0] }}
@@ -24,46 +26,60 @@ export default function Hero() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
           >
-            {/* Main Headline - Responsive layout */}
+            {/* Headline */}
             <div className="overflow-visible py-2 px-4">
               <h1 className="text-3xl xs:text-4xl sm:text-5xl md:text-6xl font-bold mb-6 leading-tight">
-                {/* Mobile: Stack vertically */}
+                
+                {/* Mobile Layout */}
                 <div className="flex flex-col items-center gap-4 sm:hidden">
                   <span className="bg-linear-to-r from-blue-600 to-purple-500 bg-clip-text text-transparent text-4xl">
                     Technology
                   </span>
-                  
+
                   <div className="flex items-center gap-4">
-                    <span className="relative top-[0.05em] w-2 h-2 rounded-full bg-gray-600 shrink-0" />
+                    <FontAwesomeIcon
+                      icon={faAsterisk}
+                      className="text-gray-500 text-xs"
+                    />
                     <span className="bg-linear-to-r from-purple-500 to-purple-600 bg-clip-text text-transparent text-4xl">
                       Talent
                     </span>
-                    <span className="relative top-[0.05em] w-2 h-2 rounded-full bg-gray-600 shrink-0" />
+                    <FontAwesomeIcon
+                      icon={faAsterisk}
+                      className="text-gray-500 text-xs"
+                    />
                   </div>
-                  
+
                   <span className="bg-linear-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent text-4xl">
                     Transformation
                   </span>
                 </div>
 
-                {/* Desktop: Keep horizontal layout */}
+                {/* Desktop Layout */}
                 <div className="hidden sm:flex items-center justify-center gap-x-3 md:gap-x-5 whitespace-nowrap">
-                  <span className="bg-linear-to-r from-blue-600 to-purple-500 bg-clip-text text-transparent">
+                  <span className=" text-blue-800 bg-clip-text">
                     Technology
                   </span>
 
-                  <span className="relative top-[0.05em] w-3 h-3 rounded-full bg-gray-600 shrink-0" />
+                  <FontAwesomeIcon
+                    icon={faAsterisk}
+                    className="text-gray-500 text-[8px] leading-none"
+                  />
 
-                  <span className="bg-linear-to-r from-purple-500 to-purple-600 bg-clip-text text-transparent">
+                  <span className="text-blue-800 bg-clip-text">
                     Talent
                   </span>
 
-                  <span className="relative top-[0.05em] w-3 h-3 rounded-full bg-gray-600 shrink-0" />
+                  <FontAwesomeIcon
+                    icon={faAsterisk}
+                    className="text-gray-500 text-[8px] leading-none"
+                  />
 
-                  <span className="bg-linear-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+                  <span className="text-blue-800 bg-clip-text">
                     Transformation
-                  </span>
+                  </span>     
                 </div>
+
               </h1>
             </div>
 
@@ -73,7 +89,7 @@ export default function Hero() {
               the right mix of people, platforms, and performance.
             </p>
 
-            {/* CTA Buttons - Responsive layout */}
+            {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row gap-3 md:gap-4 justify-center px-4">
               <a
                 href="#about"
@@ -90,7 +106,7 @@ export default function Hero() {
               </a>
             </div>
 
-            {/* Trusted by text */}
+            {/* Footer Text */}
             <p className="mt-12 md:mt-16 text-xs md:text-sm text-gray-500 tracking-wide px-4">
               Trusted by enterprises to deliver people, platforms, and outcomes.
             </p>
