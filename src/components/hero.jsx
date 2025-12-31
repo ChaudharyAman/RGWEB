@@ -32,7 +32,7 @@ export default function Hero() {
                 
                 {/* Mobile Layout */}
                 <div className="flex flex-col items-center gap-4 sm:hidden">
-                  <span className="bg-linear-to-r from-blue-600 to-purple-500 bg-clip-text text-transparent text-4xl">
+                  <span className="text-blue-800 bg-clip-text">
                     Technology
                   </span>
 
@@ -41,7 +41,7 @@ export default function Hero() {
                       icon={faAsterisk}
                       className="text-gray-500 text-xs"
                     />
-                    <span className="bg-linear-to-r from-purple-500 to-purple-600 bg-clip-text text-transparent text-4xl">
+                    <span className="text-blue-800 bg-clip-text">
                       Talent
                     </span>
                     <FontAwesomeIcon
@@ -50,7 +50,7 @@ export default function Hero() {
                     />
                   </div>
 
-                  <span className="bg-linear-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent text-4xl">
+                  <span className="text-blue-800 bg-clip-text">
                     Transformation
                   </span>
                 </div>
