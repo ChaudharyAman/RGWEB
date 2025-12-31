@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 const solutions = [
   "Human Resource Management",
   "Supply Chain Management",
-  "Fleet Management",
+  // "Fleet Management",
   "Operations Management",
   "Financial Management",
   "Workforce Management",
