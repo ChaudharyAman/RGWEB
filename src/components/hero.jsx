@@ -8,6 +8,7 @@ export default function Hero() {
   const email = "lalit@resourcegateway.in";
   const phone = "+91 9818648467";
 
+  
   return (
     <section className="section relative mt-10 py-12 md:py-20 lg:py-32 overflow-x-hidden overflow-y-visible min-h-[80vh] md:min-h-screen bg-white">
       {/* Floating Background Elements */}
