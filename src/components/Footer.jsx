@@ -41,11 +41,11 @@ export default function Footer() {
               Crafting bespoke software solutions with cutting-edge technology and best practices.
             </p>
             <div className="flex space-x-4">
-              <a href="#" className="text-gray-400 hover:text-white transition-colors">
+              <a href="https://www.linkedin.com/company/resource-gateway/" className="text-gray-400 hover:text-white transition-colors">
                 <span className="sr-only">LinkedIn</span>
                 <div className="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center">in</div>
               </a>
-              <a href="#" className="text-gray-400 hover:text-white transition-colors">
+              {/* <a href="#" className="text-gray-400 hover:text-white transition-colors">
                 <span className="sr-only">Twitter</span>
                 <div className="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center">𝕏</div>
               </a>
@@ -56,7 +56,7 @@ export default function Footer() {
               <a href="#" className="text-gray-400 hover:text-white transition-colors">
                 <span className="sr-only">Instagram</span>
                 <div className="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center">ig</div>
-              </a>
+              </a> */}
             </div>
           </div>
 

@@ -115,14 +115,14 @@ export default function Navbar() {
     },
     {
       name: "Let's Connect",
-      href: "#contact",
+      href: "mailto:lalit@resourcegateway.in",
       type: "link"
     },
-    {
-     name: "Carrers",
-     href: "#Career",
-     type: "link"
-   },
+  //   {
+  //    name: "Carrers",
+  //    href: "#Career",
+  //    type: "link"
+  //  },
   ];
 
   return (
@@ -148,7 +148,7 @@ export default function Navbar() {
           </a>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center gap-4 lg:gap-6 text-sm font-medium">
+          <nav className="hidden md:flex items-center justify-center gap-4 lg:gap-6 text-sm font-medium flex-1">
             {navItems.map((item) => (
               <div 
                 key={item.name} 
@@ -217,12 +217,12 @@ export default function Navbar() {
           </nav>
 
           {/* Desktop CTA Button */}
-          <a
+          {/* <a
             href="#contact"
             className="hidden md:block bg-linear-to-r from-blue-500 to-purple-600 text-white px-5 py-2 rounded-lg text-sm font-medium hover:shadow-lg hover:shadow-blue-500/25 transition-all duration-200 hover:-translate-y-0.5 whitespace-nowrap"
           >
             Get Started
-          </a>
+          </a> */}
 
           {/* Mobile Menu Button */}
           <button 
@@ -319,7 +319,7 @@ export default function Navbar() {
                 ))}
                 
                 {/* Mobile CTA Button */}
-                <div className="mt-2 p-4 bg-white border-t border-gray-200">
+                {/* <div className="mt-2 p-4 bg-white border-t border-gray-200">
                   <a
                     href="#contact"
                     className="block w-full bg-linear-to-r from-blue-500 to-purple-600 text-white px-6 py-3 rounded-lg font-medium text-center text-base hover:shadow-md transition-all duration-200"
@@ -327,7 +327,7 @@ export default function Navbar() {
                   >
                     Get Started
                   </a>
-                </div>
+                </div> */}
               </div>
             </motion.div>
           )}
