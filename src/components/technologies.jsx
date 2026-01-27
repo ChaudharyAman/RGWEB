@@ -3,33 +3,39 @@ import { motion } from "framer-motion";
 const technologies = [
   {
     name: "Cloud",
+    id: "cloud-technologies",
     description: "Access to scalable resources, storage, and services"
   },
   {
     name: "Mobility",
+    id: "mobility",
     description: "Mobility refers to the ability to access and use information"
   },
   {
     name: "Web Technologies",
+    id: "web-technologies",
     description: "Seamless online communication, collaboration, and IT"
   },
   {
     name: "ERP",
+    id: "erp-technologies",
     description: "Integrates core business processes and functions"
   },
   {
     name: "Data Technologies",
+    id: "data-technologies",
     description: "Advanced data processing and analytics solutions"
   },
   {
     name: "ETL Technologies",
+    id: "etl-technologies",
     description: "Efficient data extraction, transformation, and loading"
   }
 ];
 
 export default function Technologies() {
   return (
-    <section className="section py-16 bg-gray-50">
+    <section id="technologies" className="section py-16 bg-gray-50">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
           <motion.h2
@@ -50,6 +56,7 @@ export default function Technologies() {
           {technologies.map((tech, index) => (
             <motion.div
               key={tech.name}
+              id={tech.id}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: index * 0.1 }}

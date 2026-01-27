@@ -1,25 +1,25 @@
 import { motion } from "framer-motion";
 
 const solutions = [
-  "Human Resource Management",
-  "Supply Chain Management",
+  { title: "Human Resource Management", id: "hr-management" },
+  { title: "Supply Chain Management", id: "supply-chain" },
   // "Fleet Management",
-  "Operations Management",
-  "Financial Management",
-  "Workforce Management",
-  "CRM Solutions",
-  "Web Portals",
-  "Content Management System",
-  "Document Management",
-  "E-Learning Solutions",
-  "Asset Management"
+  { title: "Operations Management", id: "operations" },
+  { title: "Financial Management", id: "financial-management" },
+  { title: "Workforce Management", id: "workforce-management" },
+  { title: "CRM Solutions", id: "crm" },
+  { title: "Web Portals", id: "web-portals" },
+  { title: "Content Management System", id: "cms" },
+  { title: "Document Management", id: "document-management" },
+  { title: "E-Learning Solutions", id: "elearning" },
+  { title: "Asset Management", id: "asset-management" }
 ];
 
 export default function Solutions() {
   return (
-    <section className="section py-16">
+    <section id="solutions" className="section py-16">
       <div className="container mx-auto px-4">
-        <div className="text-center mb-12">
+         <div className="text-center mb-12">
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -37,7 +37,8 @@ export default function Solutions() {
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {solutions.map((solution, index) => (
             <motion.div
-              key={solution}
+              key={solution.title}
+              id={solution.id}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: index * 0.05 }}
@@ -47,12 +48,12 @@ export default function Solutions() {
             >
               <div className="flex items-center gap-4">
                 <div className="w-10 h-10 bg-linear-to-r from-blue-500 to-purple-500 rounded-lg flex items-center justify-center">
-                  <span className="text-white font-bold">{solution.charAt(0)}</span>
+                  <span className="text-white font-bold">{solution.title.charAt(0)}</span>
                 </div>
-                <h3 className="font-bold">{solution}</h3>
+                <h3 className="font-bold">{solution.title}</h3>
               </div>
               <p className="text-sm text-gray-600 mt-3">
-                Professional {solution.toLowerCase()} solutions tailored for business efficiency.
+                Professional {solution.title.toLowerCase()} solutions tailored for business efficiency.
               </p>
             </motion.div>
           ))}

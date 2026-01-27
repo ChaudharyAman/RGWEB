@@ -1,12 +1,12 @@
 const services = [
-  "Software Product Engineering",
-  "Dedicated Software Teams",
-  "QA & Testing",
-  "Application Development",
-  "E-Commerce",
-  "Data Engineering",
-  "Artificial Intelligence",
-  "Cloud Services",
+  { title: "Software Product Engineering", id: "software-product-engineering" },
+  { title: "Dedicated Software Teams", id: "dedicated-teams" },
+  { title: "QA & Testing", id: "qa-testing" },
+  { title: "Application Development", id: "app-development" },
+  { title: "E-Commerce", id: "ecommerce" },
+  { title: "Data Engineering", id: "data-engineering" },
+  { title: "Artificial Intelligence", id: "ai" },
+  { title: "Cloud Services", id: "cloud-services" },
 ];
 
 export default function Services() {
@@ -20,10 +20,11 @@ export default function Services() {
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {services.map((service) => (
             <div
-              key={service}
+              key={service.title}
+              id={service.id}
               className="glass p-6 rounded-xl hover:shadow-lg transition-all duration-300"
             >
-              <h3 className="font-bold mb-2">{service}</h3>
+              <h3 className="font-bold mb-2">{service.title}</h3>
               <p className="text-sm text-gray-600">
                 Enterprise-grade solutions built for scale, performance, and reliability.
               </p>

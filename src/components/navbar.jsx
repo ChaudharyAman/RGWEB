@@ -62,53 +62,6 @@ export default function Navbar() {
     setActiveMobileDropdown(activeMobileDropdown === itemName ? null : itemName);
   };
 
-  // Function to handle email click
-  const handleEmailClick = (e) => {
-    e.preventDefault();
-    const email = "lalit@resourcegateway.in";
-    const subject = "Let's Connect - ResourceGateway Inquiry";
-    const body = "Hello,\n\nI would like to connect with you regarding your services.\n\nBest regards,";
-    
-    // Create a proper mailto link
-    const mailtoLink = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-    
-    // Try to open mail client
-    window.location.href = mailtoLink;
-    
-    // Fallback: If the above doesn't work, try to open in a new tab
-    setTimeout(() => {
-      const mailWindow = window.open(mailtoLink, '_blank');
-      if (!mailWindow || mailWindow.closed || typeof mailWindow.closed === 'undefined') {
-        // If popup is blocked or fails, show email address
-        alert(`Please email us at: ${email}`);
-      }
-    }, 100);
-    
-    // Close mobile menu if open
-    setIsMobileMenuOpen(false);
-  };
-
-  // Function to handle regular link clicks
-  const handleLinkClick = (href, e) => {
-    if (href.startsWith('mailto:')) {
-      handleEmailClick(e);
-    } else if (href.startsWith('#')) {
-      // For anchor links, scroll smoothly
-      e.preventDefault();
-      const targetId = href.substring(1);
-      const targetElement = document.getElementById(targetId);
-      if (targetElement) {
-        targetElement.scrollIntoView({ behavior: 'smooth' });
-      }
-      // Close mobile menu if open
-      if (isMobileMenuOpen) {
-        setIsMobileMenuOpen(false);
-      }
-      // Close dropdown if open
-      setOpenDropdown(null);
-    }
-  };
-
   const navItems = [
     {
       name: "Home",
@@ -120,6 +73,7 @@ export default function Navbar() {
       href: "#services",
       type: "dropdown",
       items: [
+        // { name: "Smart Talent-as-a-Service (TaaS)", href: "#talent-as-a-service" },
         { name: "Software Product Engineering", href: "#software-product-engineering" },
         { name: "Dedicated Software Teams", href: "#dedicated-teams" },
         { name: "QA & Testing", href: "#qa-testing" },
@@ -164,6 +118,11 @@ export default function Navbar() {
       href: "mailto:lalit@resourcegateway.in",
       type: "link"
     },
+  //   {
+  //    name: "Carrers",
+  //    href: "#Career",
+  //    type: "link"
+  //  },
   ];
 
   return (
@@ -180,11 +139,7 @@ export default function Navbar() {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 md:h-20">
           {/* Logo */}
-          <a href="#" className="flex items-center p-1" onClick={(e) => {
-            e.preventDefault();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-            if (isMobileMenuOpen) setIsMobileMenuOpen(false);
-          }}>
+          <a href="#" className="flex items-center p-1">
             <img 
               src="logoNN.png" 
               alt="ResourceGateway" 
@@ -204,7 +159,6 @@ export default function Navbar() {
                 {item.type === "link" ? (
                   <a
                     href={item.href}
-                    onClick={(e) => handleLinkClick(item.href, e)}
                     className="text-gray-700 hover:text-blue-600 transition-colors duration-200 py-2 px-1 block"
                   >
                     {item.name}
@@ -213,7 +167,6 @@ export default function Navbar() {
                   <>
                     <a
                       href={item.href}
-                      onClick={(e) => handleLinkClick(item.href, e)}
                       className="text-gray-700 hover:text-blue-600 transition-colors duration-200 py-2 px-1 flex items-center gap-1"
                     >
                       {item.name}
@@ -247,8 +200,8 @@ export default function Navbar() {
                             >
                               <a
                                 href={subItem.href}
-                                onClick={(e) => handleLinkClick(subItem.href, e)}
                                 className="block px-4 py-3 hover:bg-gray-50 border-b border-gray-100 last:border-b-0 transition-colors duration-200"
+                                onClick={() => setOpenDropdown(null)}
                               >
                                 <span className="font-medium text-gray-800 text-sm">{subItem.name}</span>
                               </a>
@@ -262,6 +215,14 @@ export default function Navbar() {
               </div>
             ))}
           </nav>
+
+          {/* Desktop CTA Button */}
+          {/* <a
+            href="#contact"
+            className="hidden md:block bg-linear-to-r from-blue-500 to-purple-600 text-white px-5 py-2 rounded-lg text-sm font-medium hover:shadow-lg hover:shadow-blue-500/25 transition-all duration-200 hover:-translate-y-0.5 whitespace-nowrap"
+          >
+            Get Started
+          </a> */}
 
           {/* Mobile Menu Button */}
           <button 
@@ -293,7 +254,7 @@ export default function Navbar() {
               exit={{ opacity: 0, height: 0 }}
               transition={{ duration: 0.3 }}
               className="md:hidden overflow-hidden bg-white"
-              style={{ backdropFilter: 'none' }}
+              style={{ backdropFilter: 'none' }} // Explicitly remove backdrop blur
             >
               <div className="py-2 border-t border-gray-200">
                 {navItems.map((item) => (
@@ -301,8 +262,8 @@ export default function Navbar() {
                     {item.type === "link" ? (
                       <a
                         href={item.href}
-                        onClick={(e) => handleLinkClick(item.href, e)}
                         className="block py-3 px-4 text-gray-700 hover:text-blue-600 hover:bg-gray-50 transition-colors duration-200"
+                        onClick={() => setIsMobileMenuOpen(false)}
                       >
                         <span className="text-base font-medium">{item.name}</span>
                       </a>
@@ -339,8 +300,11 @@ export default function Navbar() {
                                   <a
                                     key={index}
                                     href={subItem.href}
-                                    onClick={(e) => handleLinkClick(subItem.href, e)}
                                     className="block py-3 px-4 text-gray-600 hover:text-blue-600 hover:bg-gray-100 transition-colors duration-200 border-b border-gray-100 last:border-b-0"
+                                    onClick={() => {
+                                      setIsMobileMenuOpen(false);
+                                      setActiveMobileDropdown(null);
+                                    }}
                                   >
                                     <span className="text-sm">{subItem.name}</span>
                                   </a>
@@ -353,13 +317,24 @@ export default function Navbar() {
                     )}
                   </div>
                 ))}
+                
+                {/* Mobile CTA Button */}
+               {/* <div className="mt-2 p-4 bg-white border-t border-gray-200">
+                  <a
+                    href="#contact"
+                    className="block w-full bg-linear-to-r from-blue-500 to-purple-600 text-white px-6 py-3 rounded-lg font-medium text-center text-base hover:shadow-md transition-all duration-200"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    Get Started
+                  </a>
+                </div> */}
               </div>
             </motion.div>
           )}
         </AnimatePresence>
       </div>
 
-      {/* Backdrop for mobile menu */}
+      {/* Backdrop for mobile menu - REMOVED BACKDROP BLUR */}
       <AnimatePresence>
         {isMobileMenuOpen && (
           <motion.div
@@ -368,7 +343,7 @@ export default function Navbar() {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
             className="fixed inset-0 bg-black/30 z-40 md:hidden"
-            style={{ backdropFilter: 'none' }}
+            style={{ backdropFilter: 'none' }} // Remove blur from backdrop
             onClick={() => setIsMobileMenuOpen(false)}
           />
         )}
