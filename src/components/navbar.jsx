@@ -216,13 +216,27 @@ export default function Navbar() {
             ))}
           </nav>
 
-          {/* Desktop CTA Button */}
-          {/* <a
-            href="#contact"
-            className="hidden md:block bg-linear-to-r from-blue-500 to-purple-600 text-white px-5 py-2 rounded-lg text-sm font-medium hover:shadow-lg hover:shadow-blue-500/25 transition-all duration-200 hover:-translate-y-0.5 whitespace-nowrap"
-          >
-            Get Started
-          </a> */}
+          {/* Certifications - Desktop */}
+          <div className="hidden md:flex items-center gap-2 lg:gap-4 ml-4">
+            <img 
+              src="/iso-27001.png" 
+              alt="ISO 27001 Certified" 
+              className="h-12 lg:h-14 w-auto object-contain drop-shadow-sm"
+              title="ISO 27001 Certified"
+            />
+            <img 
+              src="/iso-9001.png" 
+              alt="ISO 9001" 
+              className="h-12 lg:h-14 w-auto object-contain drop-shadow-sm"
+              title="ISO 9001 Certified"
+            />
+            <img 
+              src="/cmmi.png" 
+              alt="CMMI" 
+              className="h-10 lg:h-12 w-auto object-contain drop-shadow-sm"
+              title="CMMI Certified"
+            />
+          </div>
 
           {/* Mobile Menu Button */}
           <button 
@@ -318,16 +332,24 @@ export default function Navbar() {
                   </div>
                 ))}
                 
-                {/* Mobile CTA Button */}
-               {/* <div className="mt-2 p-4 bg-white border-t border-gray-200">
-                  <a
-                    href="#contact"
-                    className="block w-full bg-linear-to-r from-blue-500 to-purple-600 text-white px-6 py-3 rounded-lg font-medium text-center text-base hover:shadow-md transition-all duration-200"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
-                    Get Started
-                  </a>
-                </div> */}
+                {/* Certifications - Mobile */}
+                <div className="mt-2 p-4 bg-gray-50 border-t border-gray-200 flex items-center justify-center gap-4">
+                  <img 
+                    src="/iso-27001.png" 
+                    alt="ISO 27001 Certified" 
+                    className="h-14 w-auto object-contain drop-shadow-sm"
+                  />
+                  <img 
+                    src="/iso-9001.png" 
+                    alt="ISO 9001" 
+                    className="h-14 w-auto object-contain drop-shadow-sm"
+                  />
+                  <img 
+                    src="/cmmi.png" 
+                    alt="CMMI" 
+                    className="h-12 w-auto object-contain drop-shadow-sm"
+                  />
+                </div>
               </div>
             </motion.div>
           )}
