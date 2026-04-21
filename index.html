@@ -5,14 +5,22 @@
     <link rel="icon" type="image/svg+xml" href="/logoNN.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Resource Gateway</title>
-    <!-- Google tag (gtag.js) - load ONLY once -->
+    <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-64NKFCT75B"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-185S046J1M"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
+
+      // Default consent to denied until user accepts
+      gtag('consent', 'default', {
+        'ad_storage': 'denied',
+        'analytics_storage': 'denied'
+      });
+
       gtag('js', new Date());
 
-      // Add BOTH tracking IDs
+      // Both tracking IDs
       gtag('config', 'G-64NKFCT75B');
       gtag('config', 'G-185S046J1M');
     </script>
