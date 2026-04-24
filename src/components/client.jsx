@@ -13,6 +13,8 @@ import landmark from "../components/assets/clients/landmarkGroup.png";
 import biocell from "../components/assets/clients/bioxcel.png";
 import cardekho from "../components/assets/clients/carDekho.png";
 
+
+
 // ─── Client Data ──────────────────────────────────────────────────────────────
 const clients = [
   { name: "Tech Mahindra", logo: techMahindra },
