@@ -90,11 +90,20 @@ body {
 }
 
 @utility btn-primary {
-  @apply gradient-primary text-white font-semibold
+  @apply inline-flex items-center justify-center gap-2
+         gradient-primary text-sm font-semibold text-white
          px-7 py-3 rounded-[var(--radius-xl)]
          transition-all duration-300
          hover:shadow-[var(--shadow-glow)]
          hover:-translate-y-0.5;
+}
+
+@utility btn-secondary {
+  @apply inline-flex items-center justify-center gap-2
+         rounded-[var(--radius-xl)] border border-slate-300 bg-white
+         px-6 py-3 text-sm font-semibold text-slate-700
+         transition-all duration-300
+         hover:-translate-y-0.5 hover:border-cyan-300 hover:text-cyan-700;
 }
 
 @utility section {
@@ -103,4 +112,28 @@ body {
 
 @utility container {
   @apply max-w-7xl mx-auto;
+}
+
+@utility container-shell {
+  @apply mx-auto max-w-7xl px-6;
+}
+
+@utility surface-card {
+  @apply rounded-[28px] border border-white/70 bg-white/90
+         shadow-[var(--shadow-card)] backdrop-blur;
+}
+
+@utility section-kicker {
+  @apply inline-flex items-center rounded-full border border-cyan-200 bg-cyan-50
+         px-4 py-1 text-xs font-bold uppercase tracking-[0.26em] text-cyan-700;
+}
+
+@utility label-shell {
+  @apply mb-2 block text-[11px] font-bold uppercase tracking-[0.18em] text-slate-500;
+}
+
+@utility input-shell {
+  @apply w-full rounded-[20px] border border-slate-200 bg-slate-50 px-4 py-3
+         text-sm text-slate-800 outline-none transition-all duration-200
+         placeholder:text-slate-400 focus:border-cyan-400 focus:bg-white focus:ring-4 focus:ring-cyan-100;
 }

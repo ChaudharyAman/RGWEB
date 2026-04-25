@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
-export default function Navbar() {
+export default function Navbar({ currentPath = "/" }) {
   const [openDropdown, setOpenDropdown] = useState(null);
   const [dropdownTimeout, setDropdownTimeout] = useState(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -62,10 +62,18 @@ export default function Navbar() {
     setActiveMobileDropdown(activeMobileDropdown === itemName ? null : itemName);
   };
 
+  const resolveHref = (href) => {
+    if (href.startsWith("#")) {
+      return currentPath === "/careers" ? `/${href}` : href;
+    }
+
+    return href;
+  };
+
   const navItems = [
     {
       name: "Home",
-      href: "#",
+      href: "/",
       type: "link",
     },
     {
@@ -114,15 +122,15 @@ export default function Navbar() {
       ]
     },
     {
+      name: "Careers",
+      href: "/careers",
+      type: "link"
+    },
+    {
       name: "Let's Connect",
       href: "mailto:lalit@resourcegateway.in",
       type: "link"
     },
-  //   {
-  //    name: "Carrers",
-  //    href: "#Career",
-  //    type: "link"
-  //  },
   ];
 
   return (
@@ -139,7 +147,7 @@ export default function Navbar() {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 md:h-20">
           {/* Logo */}
-          <a href="#" className="flex items-center p-1">
+          <a href="/" className="flex items-center p-1">
             <img 
               src="logoNN.png" 
               alt="ResourceGateway" 
@@ -158,7 +166,7 @@ export default function Navbar() {
               >
                 {item.type === "link" ? (
                   <a
-                    href={item.href}
+                    href={resolveHref(item.href)}
                     className="text-gray-700 hover:text-blue-600 transition-colors duration-200 py-2 px-1 block"
                   >
                     {item.name}
@@ -166,7 +174,7 @@ export default function Navbar() {
                 ) : (
                   <>
                     <a
-                      href={item.href}
+                      href={resolveHref(item.href)}
                       className="text-gray-700 hover:text-blue-600 transition-colors duration-200 py-2 px-1 flex items-center gap-1"
                     >
                       {item.name}
@@ -199,7 +207,7 @@ export default function Navbar() {
                               transition={{ delay: index * 0.05 }}
                             >
                               <a
-                                href={subItem.href}
+                                href={resolveHref(subItem.href)}
                                 className="block px-4 py-3 hover:bg-gray-50 border-b border-gray-100 last:border-b-0 transition-colors duration-200"
                                 onClick={() => setOpenDropdown(null)}
                               >
@@ -275,7 +283,7 @@ export default function Navbar() {
                   <div key={item.name} className="border-b border-gray-100 last:border-b-0">
                     {item.type === "link" ? (
                       <a
-                        href={item.href}
+                        href={resolveHref(item.href)}
                         className="block py-3 px-4 text-gray-700 hover:text-blue-600 hover:bg-gray-50 transition-colors duration-200"
                         onClick={() => setIsMobileMenuOpen(false)}
                       >
@@ -313,7 +321,7 @@ export default function Navbar() {
                                 {item.items.map((subItem, index) => (
                                   <a
                                     key={index}
-                                    href={subItem.href}
+                                    href={resolveHref(subItem.href)}
                                     className="block py-3 px-4 text-gray-600 hover:text-blue-600 hover:bg-gray-100 transition-colors duration-200 border-b border-gray-100 last:border-b-0"
                                     onClick={() => {
                                       setIsMobileMenuOpen(false);

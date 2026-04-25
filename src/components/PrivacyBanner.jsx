@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react';
 
-const CookieConsent = () => {
+const PrivacyBanner = () => {
   const [visible, setVisible] = useState(false);
   const [animateOut, setAnimateOut] = useState(false);
 
   useEffect(() => {
     const consent = localStorage.getItem('cookie-consent');
     if (!consent) {
-      // Small delay so it slides in after page load
       const timer = setTimeout(() => setVisible(true), 1500);
       return () => clearTimeout(timer);
     } else if (consent === 'granted') {
@@ -18,8 +17,8 @@ const CookieConsent = () => {
   const grantConsent = () => {
     if (window.gtag) {
       window.gtag('consent', 'update', {
-        'ad_storage': 'granted',
-        'analytics_storage': 'granted'
+        ad_storage: 'granted',
+        analytics_storage: 'granted'
       });
     }
   };
@@ -62,7 +61,6 @@ const CookieConsent = () => {
           : 'consentSlideIn 0.6s ease-out forwards',
       }}
     >
-      {/* Inline keyframes */}
       <style>{`
         @keyframes consentSlideIn {
           from { opacity: 0; transform: translateY(30px) scale(0.96); }
@@ -87,7 +85,6 @@ const CookieConsent = () => {
           position: 'relative',
         }}
       >
-        {/* Decorative gradient strip at top */}
         <div
           style={{
             position: 'absolute',
@@ -100,7 +97,6 @@ const CookieConsent = () => {
         />
 
         <div style={{ display: 'flex', alignItems: 'flex-start', gap: '16px' }}>
-          {/* Cookie icon */}
           <div
             style={{
               width: '44px',
@@ -215,4 +211,4 @@ const CookieConsent = () => {
   );
 };
 
-export default CookieConsent;
+export default PrivacyBanner;
