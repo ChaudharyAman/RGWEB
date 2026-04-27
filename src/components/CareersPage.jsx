@@ -61,6 +61,24 @@ const normalizeCommaList = (value, maxItems = null) => {
   return maxItems ? items.slice(0, maxItems) : items;
 };
 
+const getJobCompanyLabel = (job) => job?.client || job?.companyId?.name || "Hiring Partner";
+
+const formatBudgetRange = (budgetRange) => {
+  if (!budgetRange) {
+    return "Shared after screening";
+  }
+
+  if (budgetRange.isOpen) {
+    return "Open";
+  }
+
+  if (budgetRange.min || budgetRange.max) {
+    return `${budgetRange.currency || "INR"} ${budgetRange.min || "-"} - ${budgetRange.max || "-"}`;
+  }
+
+  return "Shared after screening";
+};
+
 const createBasicForm = (profile) => ({
   firstName: profile?.firstName || "",
   lastName: profile?.lastName || "",
@@ -675,7 +693,7 @@ function ApplyDialog({
           <div>
             <p className="text-xs font-bold uppercase tracking-[0.24em] text-cyan-700">Apply from Resource Gateway</p>
             <h2 className="mt-2 text-3xl font-black text-slate-900">{job.publicJobTitle || job.roleDetails?.title}</h2>
-            <p className="mt-2 text-sm text-slate-500">{job.companyId?.name || job.client || "Hiring Partner"}</p>
+            <p className="mt-2 text-sm text-slate-500">{getJobCompanyLabel(job)}</p>
           </div>
           <button type="button" onClick={onClose} className="rounded-full border border-slate-200 px-3 py-1 text-sm font-semibold text-slate-500 transition hover:border-slate-300 hover:text-slate-800">
             Close
@@ -1736,7 +1754,7 @@ export default function CareersPage() {
                       <div className="flex items-start justify-between gap-4">
                         <div>
                           <p className="text-xs font-bold uppercase tracking-[0.24em] text-cyan-700">
-                            {job.companyId?.name || job.client || "Hiring Partner"}
+                            {getJobCompanyLabel(job)}
                           </p>
                           <h2 className="mt-2 text-xl font-bold text-slate-900">{job.publicJobTitle || job.roleDetails?.title}</h2>
                         </div>
@@ -1827,9 +1845,7 @@ export default function CareersPage() {
                           <div>
                             <p className="text-xs font-bold uppercase tracking-[0.2em] text-slate-400">Budget</p>
                             <p className="mt-2 text-lg font-bold text-slate-900">
-                              {selectedJob.hiringDetails?.budgetRange?.min || selectedJob.hiringDetails?.budgetRange?.max
-                                ? `${selectedJob.hiringDetails?.budgetRange?.currency || "INR"} ${selectedJob.hiringDetails?.budgetRange?.min || "-"} - ${selectedJob.hiringDetails?.budgetRange?.max || "-"}`
-                                : "Shared after screening"}
+                              {formatBudgetRange(selectedJob.hiringDetails?.budgetRange)}
                             </p>
                           </div>
                         </div>
