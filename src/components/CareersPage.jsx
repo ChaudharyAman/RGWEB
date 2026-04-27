@@ -1820,7 +1820,7 @@ export default function CareersPage() {
             <div className="grid xl:grid-cols-[minmax(0,1.15fr)_390px]">
               <div className="bg-[radial-gradient(circle_at_top_left,rgba(103,232,249,0.18),transparent_32%),linear-gradient(180deg,rgba(255,255,255,0.98),rgba(255,255,255,0.94))] p-6 md:p-8">
                 <p className="section-kicker">Resource Gateway Careers</p>
-                <h1 className="mt-4 max-w-2xl text-[1.75rem] font-black leading-[1.02] text-slate-900 md:text-[2.55rem]">
+                <h1 className="mt-4 max-w-2xl text-[1.55rem] font-black leading-[1.04] text-slate-900 md:text-[2.2rem]">
                   Explore open positions, compare opportunities, and apply with confidence.
                 </h1>
                 <p className="mt-3 max-w-xl text-[13px] leading-6 text-slate-600">
@@ -2046,26 +2046,19 @@ export default function CareersPage() {
                   </div>
 
                   <div className="mt-6">
-                    <p className="text-xs font-bold uppercase tracking-[0.18em] text-slate-400">Departments</p>
-                    <div className="mt-3 flex flex-wrap gap-2">
-                      {departmentOptions.map((department) => {
-                        const active = selectedDepartments.includes(department);
-                        return (
-                          <button
-                            key={department}
-                            type="button"
-                            onClick={() => toggleFilterValue(setSelectedDepartments, department)}
-                            className={`rounded-full border px-3 py-1.5 text-xs font-semibold transition ${
-                              active
-                                ? "border-slate-900 bg-slate-900 text-white"
-                                : "border-slate-200 bg-white text-slate-600 hover:border-cyan-200"
-                            }`}
-                          >
-                            {department}
-                          </button>
-                        );
-                      })}
-                    </div>
+                    <label className="text-xs font-bold uppercase tracking-[0.18em] text-slate-400">Departments</label>
+                    <select
+                      className="mt-3 input-shell"
+                      value={selectedDepartments[0] || ""}
+                      onChange={(event) => setSelectedDepartments(event.target.value ? [event.target.value] : [])}
+                    >
+                      <option value="">All departments</option>
+                      {departmentOptions.map((department) => (
+                        <option key={department} value={department}>
+                          {department}
+                        </option>
+                      ))}
+                    </select>
                   </div>
 
                   <div className="mt-6">
@@ -2212,11 +2205,11 @@ export default function CareersPage() {
                           ) : null}
                         </div>
                         <div className="flex flex-wrap gap-2">
-                          <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700">
+                          <span className="inline-flex items-center rounded-full border border-slate-200 bg-white px-4 py-2 text-[11px] font-semibold leading-none text-slate-700 shadow-sm">
                             {job.roleDetails?.department || "General"}
                           </span>
                           {(job.requirements?.experienceMin || job.requirements?.experienceMax) ? (
-                            <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700">
+                            <span className="inline-flex items-center rounded-full border border-slate-200 bg-white px-4 py-2 text-[11px] font-semibold leading-none text-slate-700 shadow-sm">
                               {job.requirements?.experienceMin || 0}-{job.requirements?.experienceMax || job.requirements?.experienceMin || 0} yrs
                             </span>
                           ) : null}
