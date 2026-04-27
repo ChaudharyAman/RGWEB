@@ -1820,7 +1820,7 @@ export default function CareersPage() {
             <div className="grid xl:grid-cols-[minmax(0,1.15fr)_390px]">
               <div className="bg-[radial-gradient(circle_at_top_left,rgba(103,232,249,0.18),transparent_32%),linear-gradient(180deg,rgba(255,255,255,0.98),rgba(255,255,255,0.94))] p-6 md:p-8">
                 <p className="section-kicker">Resource Gateway Careers</p>
-                <h1 className="mt-4 max-w-2xl text-[1.75rem] font-black leading-[1.02] text-slate-900 md:text-[2.55rem]">
+                <h1 className="mt-4 max-w-2xl text-[1.55rem] font-black leading-[1.04] text-slate-900 md:text-[2.2rem]">
                   Explore open positions, compare opportunities, and apply with confidence.
                 </h1>
                 <p className="mt-3 max-w-xl text-[13px] leading-6 text-slate-600">
