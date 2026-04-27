@@ -137,3 +137,14 @@ body {
          text-sm text-slate-800 outline-none transition-all duration-200
          placeholder:text-slate-400 focus:border-cyan-400 focus:bg-white focus:ring-4 focus:ring-cyan-100;
 }
+
+.scrollbar-hidden,
+.page-scrollbar-hidden {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hidden::-webkit-scrollbar,
+.page-scrollbar-hidden::-webkit-scrollbar {
+  display: none;
+}

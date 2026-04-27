@@ -61,6 +61,66 @@ const normalizeCommaList = (value, maxItems = null) => {
   return maxItems ? items.slice(0, maxItems) : items;
 };
 
+const formatRelativePosted = (value) => {
+  if (!value) return "Recently posted";
+
+  const timestamp = new Date(value).getTime();
+  if (Number.isNaN(timestamp)) {
+    return "Recently posted";
+  }
+
+  const diffMs = Date.now() - timestamp;
+  const diffMinutes = Math.max(1, Math.round(diffMs / 60000));
+
+  if (diffMinutes < 60) {
+    return `${diffMinutes} minute${diffMinutes === 1 ? "" : "s"} ago`;
+  }
+
+  const diffHours = Math.round(diffMinutes / 60);
+  if (diffHours < 24) {
+    return `${diffHours} hour${diffHours === 1 ? "" : "s"} ago`;
+  }
+
+  const diffDays = Math.round(diffHours / 24);
+  if (diffDays < 30) {
+    return `${diffDays} day${diffDays === 1 ? "" : "s"} ago`;
+  }
+
+  return formatDate(value);
+};
+
+const getJobSkills = (job, maxItems = null) => {
+  const values = [
+    ...(job?.requirements?.mustHaveSkills?.technical || []),
+    ...(job?.requirements?.mustHaveSkills?.softSkills || []),
+    ...(job?.requirements?.niceToHaveSkills || []),
+  ]
+    .map((item) => String(item || "").trim())
+    .filter(Boolean);
+
+  const uniqueValues = Array.from(new Set(values));
+  return maxItems ? uniqueValues.slice(0, maxItems) : uniqueValues;
+};
+
+const getLocationMode = (value) => {
+  const normalized = String(value || "").toLowerCase();
+
+  if (normalized.includes("remote")) return "remote";
+  if (normalized.includes("hybrid")) return "hybrid";
+  if (
+    normalized.includes("onsite") ||
+    normalized.includes("on-site") ||
+    normalized.includes("on site") ||
+    normalized.includes("office")
+  ) {
+    return "onsite";
+  }
+
+  return "flexible";
+};
+
+const getUniqueValues = (values) => Array.from(new Set(values.filter(Boolean)));
+
 const getJobCompanyLabel = (job) => job?.client || job?.companyId?.name || "Hiring Partner";
 
 const formatBudgetRange = (budgetRange) => {
@@ -178,7 +238,7 @@ function ModalFrame({ isOpen, onClose, maxWidth = "max-w-3xl", children }) {
           onClick={onClose}
         >
           <motion.div
-            className={`surface-card max-h-[92vh] w-full overflow-y-auto ${maxWidth}`}
+            className={`surface-card scrollbar-hidden max-h-[92vh] w-full overflow-y-auto ${maxWidth}`}
             initial={{ opacity: 0, y: 24, scale: 0.98 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 18, scale: 0.98 }}
@@ -613,6 +673,12 @@ function ApplyDialog({
     return null;
   }
 
+  const mustHaveSkills = job?.requirements?.mustHaveSkills || {};
+  const allMustHaveSkills = [
+    ...(mustHaveSkills.technical || []),
+    ...(mustHaveSkills.softSkills || []),
+  ];
+
   const validate = () => {
     const nextErrors = {};
 
@@ -687,7 +753,7 @@ function ApplyDialog({
   };
 
   return (
-    <ModalFrame isOpen={isOpen} onClose={onClose} maxWidth="max-w-3xl">
+    <ModalFrame isOpen={isOpen} onClose={onClose} maxWidth="max-w-5xl">
       <div className="border-b border-slate-200 px-6 py-5">
         <div className="flex items-start justify-between gap-4">
           <div>
@@ -701,8 +767,79 @@ function ApplyDialog({
         </div>
       </div>
 
-      {!token ? (
-        <div className="p-6">
+      <div className="space-y-6 p-6">
+        <div className="rounded-[28px] border border-slate-200 bg-slate-50 p-6">
+          <div className="flex flex-wrap gap-2">
+            <span className="rounded-full bg-white px-3 py-1 text-xs font-semibold text-slate-700">
+              {job.roleDetails?.employmentType || "Full-time"}
+            </span>
+            <span className="rounded-full bg-white px-3 py-1 text-xs font-semibold text-slate-700">
+              {job.roleDetails?.department || "General"}
+            </span>
+            <span className="rounded-full bg-white px-3 py-1 text-xs font-semibold text-slate-700">
+              {job.requirements?.location || "Flexible"}
+            </span>
+            {(job.requirements?.experienceMin || job.requirements?.experienceMax) ? (
+              <span className="rounded-full bg-white px-3 py-1 text-xs font-semibold text-slate-700">
+                {job.requirements?.experienceMin || 0}-{job.requirements?.experienceMax || job.requirements?.experienceMin || 0} yrs
+              </span>
+            ) : null}
+          </div>
+
+          <div className="mt-5 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+            <div className="rounded-[22px] border border-white bg-white p-4">
+              <p className="text-xs font-bold uppercase tracking-[0.2em] text-slate-400">Openings</p>
+              <p className="mt-2 text-lg font-bold text-slate-900">{job.hiringDetails?.openPositions || 1}</p>
+            </div>
+            <div className="rounded-[22px] border border-white bg-white p-4">
+              <p className="text-xs font-bold uppercase tracking-[0.2em] text-slate-400">Published</p>
+              <p className="mt-2 text-lg font-bold text-slate-900">{formatDate(job.createdAt)}</p>
+            </div>
+            <div className="rounded-[22px] border border-white bg-white p-4">
+              <p className="text-xs font-bold uppercase tracking-[0.2em] text-slate-400">Shift</p>
+              <p className="mt-2 text-lg font-bold text-slate-900">{job.requirements?.shift || "Standard"}</p>
+            </div>
+            <div className="rounded-[22px] border border-white bg-white p-4">
+              <p className="text-xs font-bold uppercase tracking-[0.2em] text-slate-400">Budget</p>
+              <p className="mt-2 text-lg font-bold text-slate-900">{formatBudgetRange(job.hiringDetails?.budgetRange)}</p>
+            </div>
+          </div>
+
+          <div className="mt-6">
+            <h3 className="text-sm font-bold uppercase tracking-[0.22em] text-slate-500">Role Snapshot</h3>
+            <p className="mt-3 whitespace-pre-line text-sm leading-7 text-slate-600">
+              {job.publicJobDescription || job.jobDescription || "The hiring team has not added a public description for this role yet."}
+            </p>
+          </div>
+
+          {allMustHaveSkills.length ? (
+            <div className="mt-6">
+              <h3 className="text-sm font-bold uppercase tracking-[0.22em] text-slate-500">Must-Have Skills</h3>
+              <div className="mt-3 flex flex-wrap gap-2">
+                {allMustHaveSkills.map((skill) => (
+                  <span key={skill} className="rounded-full border border-cyan-200 bg-cyan-50 px-3 py-1 text-xs font-semibold text-cyan-700">
+                    {skill}
+                  </span>
+                ))}
+              </div>
+            </div>
+          ) : null}
+
+          {job.requirements?.niceToHaveSkills?.length ? (
+            <div className="mt-6">
+              <h3 className="text-sm font-bold uppercase tracking-[0.22em] text-slate-500">Nice-to-Have Skills</h3>
+              <div className="mt-3 flex flex-wrap gap-2">
+                {job.requirements.niceToHaveSkills.map((skill) => (
+                  <span key={skill} className="rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-semibold text-slate-600">
+                    {skill}
+                  </span>
+                ))}
+              </div>
+            </div>
+          ) : null}
+        </div>
+
+        {!token ? (
           <div className="rounded-[28px] border border-cyan-100 bg-gradient-to-br from-cyan-50 via-white to-slate-50 p-6">
             <h3 className="text-2xl font-bold text-slate-900">Sign in to apply</h3>
             <p className="mt-3 text-sm leading-7 text-slate-600">
@@ -717,18 +854,15 @@ function ApplyDialog({
               </button>
             </div>
           </div>
-        </div>
-      ) : alreadyApplied ? (
-        <div className="p-6">
+        ) : alreadyApplied ? (
           <div className="rounded-[24px] border border-emerald-200 bg-emerald-50 p-5">
             <h3 className="text-xl font-bold text-emerald-800">You already applied to this role.</h3>
             <p className="mt-2 text-sm text-emerald-700">
-              Open the "My Applications" tab on this page to review your current status.
+              This role is on your account already. You can close this window or keep reviewing the full details above.
             </p>
           </div>
-        </div>
-      ) : (
-        <form onSubmit={handleSubmit} className="p-6">
+        ) : (
+          <form onSubmit={handleSubmit}>
           {profile?.resumeUrl ? (
             <div className="mb-5 rounded-[24px] border border-cyan-100 bg-cyan-50 p-4 text-sm text-cyan-800">
               Your TalentCIO profile resume is available here. You can reuse it or upload a different one for this application.
@@ -814,6 +948,7 @@ function ApplyDialog({
           </div>
         </form>
       )}
+      </div>
     </ModalFrame>
   );
 }
@@ -1114,10 +1249,15 @@ export default function CareersPage() {
   const [jobsLoading, setJobsLoading] = useState(true);
   const [jobsError, setJobsError] = useState("");
   const [search, setSearch] = useState("");
+  const [selectedDepartments, setSelectedDepartments] = useState([]);
+  const [selectedJobTypes, setSelectedJobTypes] = useState([]);
+  const [selectedLocationMode, setSelectedLocationMode] = useState("all");
+  const [experienceFloor, setExperienceFloor] = useState("");
   const [selectedJobId, setSelectedJobId] = useState("");
   const [selectedJobDetail, setSelectedJobDetail] = useState(null);
   const [jobDetailLoading, setJobDetailLoading] = useState(false);
   const [activePane, setActivePane] = useState("details");
+  const [workspaceOpen, setWorkspaceOpen] = useState(false);
   const [authOpen, setAuthOpen] = useState(false);
   const [authMode, setAuthMode] = useState("login");
   const [applyOpen, setApplyOpen] = useState(false);
@@ -1155,6 +1295,16 @@ export default function CareersPage() {
     const timeout = window.setTimeout(() => setFlash(null), 4500);
     return () => window.clearTimeout(timeout);
   }, [flash]);
+
+  useEffect(() => {
+    document.documentElement.classList.add("page-scrollbar-hidden");
+    document.body.classList.add("page-scrollbar-hidden");
+
+    return () => {
+      document.documentElement.classList.remove("page-scrollbar-hidden");
+      document.body.classList.remove("page-scrollbar-hidden");
+    };
+  }, []);
 
   const apiRequest = async (path, { method = "GET", body, token: requestToken = "" } = {}) => {
     const headers = {};
@@ -1312,24 +1462,57 @@ export default function CareersPage() {
     });
   }, []);
 
+  const profileSkillNames = useMemo(
+    () =>
+      skills
+        .map((skill) => String(skill?.name || "").trim())
+        .filter(Boolean),
+    [skills]
+  );
+
+  const departmentOptions = useMemo(
+    () => getUniqueValues(jobs.map((job) => job.roleDetails?.department || "General")),
+    [jobs]
+  );
+
+  const jobTypeOptions = useMemo(
+    () => {
+      const derivedTypes = getUniqueValues(jobs.map((job) => job.roleDetails?.employmentType || "Full-time"));
+      return derivedTypes.length ? derivedTypes : JOB_TYPES.filter((item) => item !== "Remote");
+    },
+    [jobs]
+  );
+
   const filteredJobs = useMemo(() => {
     const query = search.trim().toLowerCase();
-    if (!query) return jobs;
 
-    return jobs.filter((job) =>
-      [
+    return jobs.filter((job) => {
+      const jobDepartment = job.roleDetails?.department || "General";
+      const jobType = job.roleDetails?.employmentType || "Full-time";
+      const locationMode = getLocationMode(job.requirements?.location);
+      const experienceCeiling = Number(job.requirements?.experienceMax || job.requirements?.experienceMin || 0);
+
+      const matchesQuery = !query || [
         job.publicJobTitle,
         job.roleDetails?.title,
         job.roleDetails?.department,
         job.companyId?.name,
         job.client,
         job.publicJobDescription,
+        ...getJobSkills(job),
       ]
         .join(" ")
         .toLowerCase()
-        .includes(query)
-    );
-  }, [jobs, search]);
+        .includes(query);
+
+      const matchesDepartment = selectedDepartments.length === 0 || selectedDepartments.includes(jobDepartment);
+      const matchesJobType = selectedJobTypes.length === 0 || selectedJobTypes.includes(jobType);
+      const matchesLocation = selectedLocationMode === "all" || selectedLocationMode === locationMode;
+      const matchesExperience = !experienceFloor || experienceCeiling >= Number(experienceFloor);
+
+      return matchesQuery && matchesDepartment && matchesJobType && matchesLocation && matchesExperience;
+    });
+  }, [experienceFloor, jobs, search, selectedDepartments, selectedJobTypes, selectedLocationMode]);
 
   useEffect(() => {
     if (filteredJobs.length === 0) {
@@ -1400,6 +1583,9 @@ export default function CareersPage() {
       return;
     }
     setActivePane(pane);
+    if (pane !== "details") {
+      setWorkspaceOpen(true);
+    }
   };
 
   const saveProfileResponse = (payload, successMessage) => {
@@ -1587,30 +1773,63 @@ export default function CareersPage() {
     setNewSkill("");
   };
 
+  const scrollToJobs = () => {
+    document.getElementById("careers-job-board")?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+
+  const openJobDialog = (jobId) => {
+    setSelectedJobId(jobId);
+    setApplyOpen(true);
+  };
+
+  const toggleFilterValue = (setter, value) => {
+    setter((current) => (current.includes(value) ? current.filter((item) => item !== value) : [...current, value]));
+  };
+
+  const clearFilters = () => {
+    setSearch("");
+    setSelectedDepartments([]);
+    setSelectedJobTypes([]);
+    setSelectedLocationMode("all");
+    setExperienceFloor("");
+  };
+
   const mustHaveSkills = selectedJob?.requirements?.mustHaveSkills || {};
   const allMustHaveSkills = [
     ...(mustHaveSkills.technical || []),
     ...(mustHaveSkills.softSkills || []),
   ];
+  const remoteRolesCount = jobs.filter((job) => getLocationMode(job.requirements?.location) === "remote").length;
+  const matchedRolesCount = jobs.filter((job) => {
+    if (profileSkillNames.length === 0) return false;
+    const jobSkills = getJobSkills(job).map((skill) => skill.toLowerCase());
+    return profileSkillNames.some((skill) => jobSkills.includes(skill.toLowerCase()));
+  }).length;
+  const activeFilterCount =
+    selectedDepartments.length +
+    selectedJobTypes.length +
+    (selectedLocationMode !== "all" ? 1 : 0) +
+    (experienceFloor ? 1 : 0) +
+    (search ? 1 : 0);
 
   return (
-    <main className="pt-24 md:pt-28">
-      <section className="section">
+    <main className="bg-[linear-gradient(180deg,#f3fbff_0%,#edf5fb_38%,#f8fafc_100%)] pt-24 md:pt-28">
+      <section className="px-4 pb-6 md:px-6">
         <div className="container">
-          <div className="overflow-hidden rounded-[34px] border border-white/60 bg-[radial-gradient(circle_at_top_left,rgba(31,182,193,0.18),transparent_30%),radial-gradient(circle_at_bottom_right,rgba(45,47,143,0.12),transparent_28%),linear-gradient(135deg,rgba(255,255,255,0.98),rgba(241,245,249,0.9))] p-8 shadow-[0_24px_80px_rgba(15,23,42,0.12)] md:p-12">
-            <div className="grid gap-8 xl:grid-cols-[1.05fr_0.95fr]">
-              <div>
+          <div className="overflow-hidden rounded-[36px] border border-white/70 bg-[linear-gradient(135deg,rgba(255,255,255,0.98),rgba(247,250,252,0.98))] shadow-[0_30px_90px_rgba(15,23,42,0.12)]">
+            <div className="grid xl:grid-cols-[minmax(0,1.15fr)_390px]">
+              <div className="bg-[radial-gradient(circle_at_top_left,rgba(103,232,249,0.18),transparent_32%),linear-gradient(180deg,rgba(255,255,255,0.98),rgba(255,255,255,0.94))] p-6 md:p-8">
                 <p className="section-kicker">Resource Gateway Careers</p>
-                <h1 className="mt-5 max-w-3xl text-4xl font-black leading-tight text-slate-900 md:text-6xl">
-                  Browse roles, sign in, apply, and manage your profile without leaving this page.
+                <h1 className="mt-4 max-w-2xl text-[1.75rem] font-black leading-[1.02] text-slate-900 md:text-[2.55rem]">
+                  Explore open positions, compare opportunities, and apply with confidence.
                 </h1>
-                <p className="mt-5 max-w-2xl text-base leading-8 text-slate-600 md:text-lg">
-                  Resource Gateway stays as the branded front door. TalentCIO powers the jobs engine, applicant login, applications, and profile data quietly underneath.
+                <p className="mt-3 max-w-xl text-[13px] leading-6 text-slate-600">
+                  Discover current openings, narrow them with smart filters, and move from job search to application in one streamlined experience.
                 </p>
 
-                <div className="mt-6 flex flex-wrap gap-3">
-                  <button type="button" onClick={() => handleProtectedPane("details")} className="btn-primary">
-                    Explore Active Roles
+                <div className="mt-5 flex flex-wrap gap-3">
+                  <button type="button" onClick={scrollToJobs} className="btn-primary">
+                    Explore Opportunities
                   </button>
                   {token ? (
                     <>
@@ -1627,80 +1846,123 @@ export default function CareersPage() {
                         Applicant Sign In
                       </button>
                       <button type="button" onClick={() => { setAuthMode("register"); setAuthOpen(true); }} className="btn-secondary">
-                        Create Account
+                        Join Now
                       </button>
                     </>
                   )}
                 </div>
+
+                <div className="mt-5 grid gap-3 sm:grid-cols-3">
+                  <div className="rounded-[18px] border border-cyan-100 bg-cyan-50/80 px-4 py-3">
+                    <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-cyan-700">Live Roles</p>
+                    <div className="mt-2 flex items-end gap-2">
+                      <span className="text-[2rem] font-black text-slate-900">{jobs.length}</span>
+                      <span className="pb-1 text-xs text-slate-500">open now</span>
+                    </div>
+                  </div>
+                  <div className="rounded-[18px] border border-slate-200 bg-white/80 px-4 py-3">
+                    <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-slate-500">Remote Friendly</p>
+                    <div className="mt-2 flex items-end gap-2">
+                      <span className="text-[2rem] font-black text-slate-900">{remoteRolesCount}</span>
+                      <span className="pb-1 text-xs text-slate-500">remote roles</span>
+                    </div>
+                  </div>
+                  <div className="rounded-[18px] border border-slate-200 bg-white/80 px-4 py-3">
+                    <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-slate-500">Departments</p>
+                    <div className="mt-2 flex items-end gap-2">
+                      <span className="text-[2rem] font-black text-slate-900">{departmentOptions.length}</span>
+                      <span className="pb-1 text-xs text-slate-500">teams hiring</span>
+                    </div>
+                  </div>
+                </div>
               </div>
 
-              <div className="surface-card p-6">
-                <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-                  <div>
-                    <p className="text-xs font-bold uppercase tracking-[0.2em] text-slate-500">Applicant Workspace</p>
-                    <h2 className="mt-2 text-2xl font-bold text-slate-950">
-                      {token ? `Welcome, ${applicant?.firstName || "Applicant"}` : "Ready to apply?"}
-                    </h2>
-                    <p className="mt-2 text-sm leading-7 text-slate-600">
-                      {token
-                        ? `${applicant?.email || ""} is connected here. Switch tabs below to track applications or update your TalentCIO profile.`
-                        : "Sign in once and your Resource Gateway careers page becomes your TalentCIO applicant dashboard too."}
-                    </p>
-                  </div>
-                  {token ? (
-                    <button
-                      type="button"
-                      onClick={handleLogout}
-                      className="inline-flex shrink-0 items-center justify-center whitespace-nowrap rounded-[16px] border border-red-200 bg-white px-5 py-2.5 text-sm font-semibold text-red-600 transition hover:border-red-300 hover:bg-red-50"
-                    >
-                      Sign Out
-                    </button>
-                  ) : null}
-                </div>
+              <div className="border-t border-slate-200 bg-slate-50/85 p-6 md:p-7 xl:border-l xl:border-t-0">
+                <div className="rounded-[24px] border border-white/80 bg-white/90 p-5 shadow-[0_18px_45px_rgba(15,23,42,0.08)]">
+                  <div className="flex flex-col gap-4">
+                    <div className="flex items-start justify-between gap-4">
+                      <div>
+                        <p className="text-xs font-bold uppercase tracking-[0.24em] text-slate-500">Applicant Workspace</p>
+                        <h2 className="mt-3 text-[1.45rem] font-black leading-tight text-slate-950">
+                          {token ? `Welcome back, ${applicant?.firstName || "Applicant"}` : "Ready to apply?"}
+                        </h2>
+                        <p className="mt-3 text-[13px] leading-6 text-slate-600">
+                          {token
+                            ? `${applicant?.email || ""} is connected here. Your applications, resume, and profile stay synced.`
+                            : "Create an applicant account once, then reuse your profile and track every application from this page."}
+                        </p>
+                      </div>
+                      {token ? (
+                        <button
+                          type="button"
+                          onClick={handleLogout}
+                          className="inline-flex shrink-0 items-center justify-center whitespace-nowrap rounded-[14px] border border-red-200 bg-white px-4 py-2 text-sm font-semibold text-red-600 transition hover:border-red-300 hover:bg-red-50"
+                        >
+                          Sign Out
+                        </button>
+                      ) : null}
+                    </div>
 
-                {token ? (
-                  <div className="mt-5 grid gap-3 sm:grid-cols-3">
-                    <div className="rounded-[22px] border border-slate-200 bg-slate-50 p-4">
-                      <p className="text-xs font-bold uppercase tracking-[0.18em] text-slate-400">Applications</p>
-                      <p className="mt-2 text-3xl font-black text-slate-900">{applications.length}</p>
-                    </div>
-                    <div className="rounded-[22px] border border-slate-200 bg-slate-50 p-4">
-                      <p className="text-xs font-bold uppercase tracking-[0.18em] text-slate-400">Profile</p>
-                      <p className="mt-2 text-3xl font-black text-slate-900">{profileCompletion?.score || 0}%</p>
-                    </div>
-                    <div className="rounded-[22px] border border-slate-200 bg-slate-50 p-4">
-                      <p className="text-xs font-bold uppercase tracking-[0.18em] text-slate-400">Saved Resume</p>
-                      <p className="mt-2 text-sm font-bold text-slate-900">{profile?.resumeFileName || "Not uploaded yet"}</p>
-                    </div>
+                    {token ? (
+                      <div className="grid grid-cols-3 gap-2.5">
+                        <div className="rounded-[18px] border border-slate-200 bg-slate-50 px-3 py-3.5 text-center">
+                          <div className="flex min-h-[28px] items-start justify-center">
+                            <p className="text-[10px] font-semibold tracking-[0.04em] text-slate-500 leading-tight">Applications</p>
+                          </div>
+                          <p className="mt-2.5 text-[1.75rem] leading-none font-black text-slate-900">{applications.length}</p>
+                        </div>
+                        <div className="rounded-[18px] border border-slate-200 bg-slate-50 px-3 py-3.5 text-center">
+                          <div className="flex min-h-[28px] items-start justify-center">
+                            <p className="text-[10px] font-semibold tracking-[0.04em] text-slate-500 leading-tight">Profile</p>
+                          </div>
+                          <p className="mt-2.5 text-[1.75rem] leading-none font-black text-slate-900">{profileCompletion?.score || 0}%</p>
+                        </div>
+                        <div className="rounded-[18px] border border-slate-200 bg-slate-50 px-3 py-3.5 text-center">
+                          <div className="flex min-h-[28px] items-start justify-center">
+                            <p className="text-[10px] font-semibold tracking-[0.04em] text-slate-500 leading-tight">Skill Matches</p>
+                          </div>
+                          <p className="mt-2.5 text-[1.75rem] leading-none font-black text-slate-900">{matchedRolesCount}</p>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="space-y-3 rounded-[20px] border border-slate-200 bg-slate-50 p-4">
+                        <div className="flex items-start gap-3">
+                          <div className="mt-1 h-2.5 w-2.5 rounded-full bg-cyan-500" />
+                          <p className="text-[13px] leading-6 text-slate-600">TalentCIO handles account creation and secure sign-in behind the scenes.</p>
+                        </div>
+                        <div className="flex items-start gap-3">
+                          <div className="mt-1 h-2.5 w-2.5 rounded-full bg-cyan-500" />
+                          <p className="text-[13px] leading-6 text-slate-600">Your saved resume and profile details can be reused across future applications.</p>
+                        </div>
+                        <div className="flex items-start gap-3">
+                          <div className="mt-1 h-2.5 w-2.5 rounded-full bg-cyan-500" />
+                          <p className="text-[13px] leading-6 text-slate-600">Application status tracking stays linked to the same applicant account.</p>
+                        </div>
+                      </div>
+                    )}
                   </div>
-                ) : (
-                  <div className="mt-5 rounded-[24px] border border-slate-200 bg-slate-50 p-5">
-                    <p className="text-sm leading-7 text-slate-600">
-                      Candidate accounts are still TalentCIO accounts underneath, so email verification, Google sign-in, profile completion, and application tracking all keep working here.
-                    </p>
-                  </div>
-                )}
+                </div>
               </div>
             </div>
 
-            <div className="mt-8 rounded-[28px] border border-slate-200 bg-white/80 p-5 shadow-[0_18px_45px_rgba(15,23,42,0.08)] backdrop-blur">
-              <label className="text-xs font-bold uppercase tracking-[0.24em] text-slate-500">Search roles</label>
-              <input
-                value={search}
-                onChange={(event) => setSearch(event.target.value)}
-                placeholder="Role, company, department..."
-                className="mt-3 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-800 outline-none transition focus:border-cyan-400 focus:bg-white focus:ring-4 focus:ring-cyan-100"
-              />
-              <div className="mt-4 flex flex-wrap items-center justify-between gap-3 text-sm text-slate-500">
-                <span>{filteredJobs.length} active role{filteredJobs.length === 1 ? "" : "s"} on Resource Gateway</span>
-                {/* <span>TalentCIO-backed applicant workflow</span> */}
+            <div className="border-t border-cyan-100 bg-[linear-gradient(90deg,#58c8f4_0%,#35a9db_45%,#2394ca_100%)] px-5 py-5 md:px-8">
+              <div className="flex justify-start">
+                <div className="w-full max-w-xl">
+                  <label className="text-xs font-bold uppercase tracking-[0.22em] text-white/80">Search roles</label>
+                  <input
+                    value={search}
+                    onChange={(event) => setSearch(event.target.value)}
+                    placeholder="UI/UX Designer, React, remote, marketing..."
+                    className="mt-2 w-full rounded-[18px] border border-white/60 bg-white px-4 py-3 text-sm text-slate-800 outline-none transition focus:border-slate-900 focus:ring-4 focus:ring-white/40"
+                  />
+                </div>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      <section className="px-6 pb-24">
+      <section className="px-4 pb-24 md:px-6">
         <div className="container">
           {flash ? (
             <div className={`mb-6 rounded-[24px] border px-5 py-4 text-sm font-medium ${
@@ -1715,91 +1977,273 @@ export default function CareersPage() {
           ) : null}
 
           {jobsLoading ? (
-            <div className="grid gap-6 lg:grid-cols-[0.95fr_1.05fr]">
+            <div className="grid gap-6 xl:grid-cols-[280px_minmax(0,1fr)]">
+              <div className="h-[32rem] animate-pulse rounded-[30px] bg-white shadow-[var(--shadow-card)]" />
               <div className="space-y-4">
                 {Array.from({ length: 4 }).map((_, index) => (
-                  <div key={index} className="h-40 animate-pulse rounded-[28px] bg-white shadow-[var(--shadow-card)]" />
+                  <div key={index} className="h-56 animate-pulse rounded-[28px] bg-white shadow-[var(--shadow-card)]" />
                 ))}
               </div>
-              <div className="h-[38rem] animate-pulse rounded-[32px] bg-white shadow-[var(--shadow-card)]" />
             </div>
           ) : jobsError ? (
             <div className="rounded-[28px] border border-red-100 bg-red-50 px-6 py-10 text-center text-red-700 shadow-[var(--shadow-card)]">
               {jobsError}
             </div>
-          ) : filteredJobs.length === 0 ? (
-            <div className="rounded-[32px] border border-slate-200 bg-white px-6 py-14 text-center shadow-[var(--shadow-card)]">
-              <h2 className="text-2xl font-bold text-slate-900">No roles match your search.</h2>
-              <p className="mt-3 text-slate-500">Try a broader keyword or check back later for newly published openings.</p>
-            </div>
           ) : (
-            <div className="grid gap-6 lg:grid-cols-[0.95fr_1.05fr]">
-              <div className="space-y-4">
-                {filteredJobs.map((job, index) => {
-                  const isActive = selectedJobId === job._id;
-                  return (
-                    <motion.button
-                      key={job._id}
+            <div id="careers-job-board" className="grid gap-6 xl:grid-cols-[280px_minmax(0,1fr)]">
+              <aside className="space-y-5 xl:sticky xl:top-28 xl:h-fit">
+                <div className="rounded-[30px] border border-white/80 bg-white p-6 shadow-[0_16px_40px_rgba(15,23,42,0.08)]">
+                  <div className="flex items-center justify-between gap-3">
+                    <div>
+                      <p className="text-xs font-bold uppercase tracking-[0.2em] text-slate-400">Filter by</p>
+                      <h2 className="mt-2 text-2xl font-bold text-slate-900">Find your fit</h2>
+                    </div>
+                    {activeFilterCount ? (
+                      <button type="button" onClick={clearFilters} className="text-sm font-semibold text-cyan-700 hover:underline">
+                        Clear
+                      </button>
+                    ) : null}
+                  </div>
+
+                  <div className="mt-6">
+                    <p className="text-xs font-bold uppercase tracking-[0.18em] text-slate-400">Location setup</p>
+                    <div className="mt-3 grid grid-cols-2 gap-2">
+                      {[
+                        ["all", "All"],
+                        ["remote", "Remote"],
+                        ["hybrid", "Hybrid"],
+                        ["onsite", "Onsite"],
+                      ].map(([value, label]) => (
+                        <button
+                          key={value}
+                          type="button"
+                          onClick={() => setSelectedLocationMode(value)}
+                          className={`rounded-[16px] border px-3 py-2 text-sm font-semibold transition ${
+                            selectedLocationMode === value
+                              ? "border-cyan-300 bg-cyan-50 text-cyan-700"
+                              : "border-slate-200 bg-slate-50 text-slate-600 hover:border-cyan-200"
+                          }`}
+                        >
+                          {label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="mt-6">
+                    <label className="text-xs font-bold uppercase tracking-[0.18em] text-slate-400">Minimum experience</label>
+                    <select
+                      className="mt-3 input-shell"
+                      value={experienceFloor}
+                      onChange={(event) => setExperienceFloor(event.target.value)}
+                    >
+                      <option value="">Any level</option>
+                      <option value="1">1+ years</option>
+                      <option value="3">3+ years</option>
+                      <option value="5">5+ years</option>
+                      <option value="8">8+ years</option>
+                    </select>
+                  </div>
+
+                  <div className="mt-6">
+                    <p className="text-xs font-bold uppercase tracking-[0.18em] text-slate-400">Departments</p>
+                    <div className="mt-3 flex flex-wrap gap-2">
+                      {departmentOptions.map((department) => {
+                        const active = selectedDepartments.includes(department);
+                        return (
+                          <button
+                            key={department}
+                            type="button"
+                            onClick={() => toggleFilterValue(setSelectedDepartments, department)}
+                            className={`rounded-full border px-3 py-1.5 text-xs font-semibold transition ${
+                              active
+                                ? "border-slate-900 bg-slate-900 text-white"
+                                : "border-slate-200 bg-white text-slate-600 hover:border-cyan-200"
+                            }`}
+                          >
+                            {department}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  <div className="mt-6">
+                    <p className="text-xs font-bold uppercase tracking-[0.18em] text-slate-400">Job type</p>
+                    <div className="mt-3 space-y-2">
+                      {jobTypeOptions.slice(0, 6).map((jobType) => (
+                        <label key={jobType} className="flex items-center justify-between gap-3 rounded-[16px] border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-700">
+                          <span>{jobType}</span>
+                          <input
+                            type="checkbox"
+                            checked={selectedJobTypes.includes(jobType)}
+                            onChange={() => toggleFilterValue(setSelectedJobTypes, jobType)}
+                            className="h-4 w-4 rounded border-slate-300 text-cyan-600 focus:ring-cyan-500"
+                          />
+                        </label>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                <div className="rounded-[30px] border border-cyan-100 bg-[linear-gradient(180deg,rgba(236,253,255,0.95),rgba(240,249,255,0.95))] p-5 shadow-[0_16px_40px_rgba(15,23,42,0.06)]">
+                  <p className="text-xs font-bold uppercase tracking-[0.2em] text-cyan-700">Applicant access</p>
+                  <h3 className="mt-2 text-xl font-bold text-slate-900">
+                    {token ? "Your profile is linked" : "Apply faster with an account"}
+                  </h3>
+                  <p className="mt-2 text-sm leading-7 text-slate-600">
+                    {token
+                      ? `Resume on file: ${profile?.resumeFileName || "not uploaded yet"}. Use the right panel to keep your profile updated.`
+                      : "Signing in gives you saved applications, one-click profile reuse, and TalentCIO applicant tracking from the same page."}
+                  </p>
+                  <div className="mt-4 flex flex-wrap gap-3">
+                    <button
                       type="button"
+                      onClick={() => {
+                        if (token) {
+                          handleProtectedPane("profile");
+                          return;
+                        }
+                        setAuthMode("login");
+                        setAuthOpen(true);
+                      }}
+                      className="btn-secondary"
+                    >
+                      {token ? "Open My Profile" : "Sign In to Apply"}
+                    </button>
+                    {token ? (
+                      <button type="button" onClick={() => handleProtectedPane("applications")} className="btn-secondary">
+                        View Applications
+                      </button>
+                    ) : null}
+                  </div>
+                </div>
+              </aside>
+
+              <div className="space-y-4">
+                <div className="flex flex-col gap-3 rounded-[26px] border border-white/80 bg-white px-5 py-4 shadow-[0_16px_40px_rgba(15,23,42,0.06)] md:flex-row md:items-center md:justify-between">
+                  <div>
+                    <p className="text-xs font-bold uppercase tracking-[0.18em] text-slate-400">Active roles</p>
+                    <h2 className="mt-1 text-2xl font-bold text-slate-900">
+                      Showing {filteredJobs.length} of {jobs.length} opportunities
+                    </h2>
+                  </div>
+                  <div className="flex flex-wrap gap-2">
+                    {activeFilterCount ? (
+                      <span className="rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-semibold text-slate-600">
+                        {activeFilterCount} active filter{activeFilterCount === 1 ? "" : "s"}
+                      </span>
+                    ) : null}
+                    <span className="rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-semibold text-slate-600">
+                      TalentCIO-powered applications
+                    </span>
+                  </div>
+                </div>
+
+                {filteredJobs.length === 0 ? (
+                  <div className="rounded-[32px] border border-slate-200 bg-white px-6 py-14 text-center shadow-[var(--shadow-card)]">
+                    <h2 className="text-2xl font-bold text-slate-900">No roles match your current filters.</h2>
+                    <p className="mt-3 text-slate-500">Try clearing a few filters or broadening the search keywords.</p>
+                    <button type="button" onClick={clearFilters} className="btn-secondary mt-6">
+                      Clear Filters
+                    </button>
+                  </div>
+                ) : filteredJobs.map((job, index) => {
+                  const employmentType = job.roleDetails?.employmentType || "Full-time";
+                  const locationLabel = job.requirements?.location || "Flexible";
+                  const previewSkills = getJobSkills(job, 4);
+                  const profileMatches = profileSkillNames.filter((skill) =>
+                    getJobSkills(job).map((item) => item.toLowerCase()).includes(skill.toLowerCase())
+                  ).length;
+                  const employmentBadgeClass =
+                    employmentType.toLowerCase().includes("part")
+                      ? "bg-rose-50 text-rose-600"
+                      : employmentType.toLowerCase().includes("contract") || employmentType.toLowerCase().includes("freelance")
+                        ? "bg-amber-50 text-amber-700"
+                        : "bg-emerald-50 text-emerald-700";
+
+                  return (
+                    <motion.div
+                      key={job._id}
                       initial={{ opacity: 0, y: 18 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: index * 0.04 }}
-                      onClick={() => { setSelectedJobId(job._id); setActivePane("details"); }}
-                      className={`w-full rounded-[28px] border p-5 text-left transition-all ${
-                        isActive
-                          ? "border-cyan-300 bg-white shadow-[0_18px_50px_rgba(31,182,193,0.18)]"
-                          : "border-white/70 bg-white/85 shadow-[var(--shadow-card)] hover:-translate-y-0.5 hover:border-cyan-200"
-                      }`}
+                      className="w-full rounded-[28px] border border-white/80 bg-white p-6 text-left shadow-[0_16px_40px_rgba(15,23,42,0.08)] transition-all hover:-translate-y-0.5 hover:border-cyan-200"
                     >
-                      <div className="flex items-start justify-between gap-4">
-                        <div>
-                          <p className="text-xs font-bold uppercase tracking-[0.24em] text-cyan-700">
-                            {getJobCompanyLabel(job)}
+                      <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+                        <div className="min-w-0">
+                          <p className="text-xs font-medium tracking-[0.12em] text-slate-400">{formatRelativePosted(job.createdAt)}</p>
+                          <h2 className="mt-2 text-2xl font-bold text-slate-900">{job.publicJobTitle || job.roleDetails?.title}</h2>
+                          <p className="mt-2 text-sm font-medium text-slate-600">
+                            {getJobCompanyLabel(job)} <span className="text-slate-300">|</span> {locationLabel}
                           </p>
-                          <h2 className="mt-2 text-xl font-bold text-slate-900">{job.publicJobTitle || job.roleDetails?.title}</h2>
                         </div>
-                        <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-600">
-                          {job.roleDetails?.employmentType || "Full-time"}
+                        <span className={`inline-flex rounded-full px-4 py-1.5 text-xs font-bold ${employmentBadgeClass}`}>
+                          {employmentType}
                         </span>
-                      </div>
-
-                      <div className="mt-4 flex flex-wrap gap-2">
-                        <span className="rounded-full border border-slate-200 px-3 py-1 text-xs font-medium text-slate-600">
-                          {job.roleDetails?.department || "General"}
-                        </span>
-                        <span className="rounded-full border border-slate-200 px-3 py-1 text-xs font-medium text-slate-600">
-                          {job.requirements?.location || "Flexible"}
-                        </span>
-                        <span className="rounded-full border border-slate-200 px-3 py-1 text-xs font-medium text-slate-600">
-                          Posted {formatDate(job.createdAt)}
-                        </span>
-                        {appliedJobIds.has(job._id) ? (
-                          <span className="rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700">
-                            Applied
-                          </span>
-                        ) : null}
                       </div>
 
                       <p className="mt-4 text-sm leading-7 text-slate-600">
-                        {trimText(job.publicJobDescription, 170) || "View the full role details to learn more about this opportunity."}
+                        {trimText(job.publicJobDescription, 200) || "View the full role details to learn more about this opportunity."}
                       </p>
-                    </motion.button>
+
+                      <div className="mt-5 flex flex-wrap gap-2">
+                        {previewSkills.length ? (
+                          previewSkills.map((skill) => (
+                            <span key={skill} className="rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-medium text-slate-600">
+                              {skill}
+                            </span>
+                          ))
+                        ) : (
+                          <span className="rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-medium text-slate-500">
+                            Skills shared in full role details
+                          </span>
+                        )}
+                      </div>
+
+                      <div className="mt-5 flex flex-col gap-3 border-t border-slate-100 pt-4 md:flex-row md:items-center md:justify-between">
+                        <div className="flex flex-wrap items-center gap-3 text-sm">
+                          <button type="button" onClick={() => openJobDialog(job._id)} className="font-semibold text-cyan-700 transition hover:text-cyan-800">
+                            {appliedJobIds.has(job._id) ? "View Applied Role" : "Apply Now"}
+                          </button>
+                          <span className="text-slate-400">{job.hiringDetails?.openPositions || 1} opening{(job.hiringDetails?.openPositions || 1) === 1 ? "" : "s"}</span>
+                          {profileMatches ? (
+                            <span className="text-emerald-600">{profileMatches} skill match{profileMatches === 1 ? "" : "es"}</span>
+                          ) : null}
+                        </div>
+                        <div className="flex flex-wrap gap-2">
+                          <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700">
+                            {job.roleDetails?.department || "General"}
+                          </span>
+                          {(job.requirements?.experienceMin || job.requirements?.experienceMax) ? (
+                            <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700">
+                              {job.requirements?.experienceMin || 0}-{job.requirements?.experienceMax || job.requirements?.experienceMin || 0} yrs
+                            </span>
+                          ) : null}
+                          <button type="button" onClick={() => openJobDialog(job._id)} className="btn-primary px-4 py-2">
+                            {appliedJobIds.has(job._id) ? "Open Details" : "Apply"}
+                          </button>
+                        </div>
+                      </div>
+                    </motion.div>
                   );
                 })}
               </div>
 
-              <div className={activePane === "details" ? "sticky top-28 h-fit" : ""}>
-                <div className="surface-card overflow-hidden">
-                  <div className="border-b border-slate-200 px-6 py-5">
-                    <div className="flex flex-wrap items-center gap-3">
-                      <button type="button" onClick={() => handleProtectedPane("details")} className={`rounded-full px-4 py-2 text-sm font-semibold transition ${activePane === "details" ? "bg-slate-900 text-white" : "bg-slate-100 text-slate-600 hover:bg-slate-200"}`}>
-                        Role Details
-                      </button>
-                      <button type="button" onClick={() => handleProtectedPane("applications")} className={`rounded-full px-4 py-2 text-sm font-semibold transition ${activePane === "applications" ? "bg-slate-900 text-white" : "bg-slate-100 text-slate-600 hover:bg-slate-200"}`}>
-                        My Applications
-                      </button>
-                      <button type="button" onClick={() => handleProtectedPane("profile")} className={`rounded-full px-4 py-2 text-sm font-semibold transition ${activePane === "profile" ? "bg-slate-900 text-white" : "bg-slate-100 text-slate-600 hover:bg-slate-200"}`}>
-                        My Profile
+              <ModalFrame isOpen={workspaceOpen} onClose={() => setWorkspaceOpen(false)} maxWidth="max-w-6xl">
+                <div className="overflow-hidden rounded-[30px] border border-white/80 bg-white shadow-[0_20px_50px_rgba(15,23,42,0.1)]">
+                  <div className="border-b border-slate-200 bg-slate-50/80 px-6 py-5">
+                    <div className="flex flex-wrap items-center justify-between gap-3">
+                      <div className="flex flex-wrap items-center gap-3">
+                        <button type="button" onClick={() => handleProtectedPane("applications")} className={`rounded-full px-4 py-2 text-sm font-semibold transition ${activePane === "applications" ? "bg-slate-900 text-white" : "bg-white text-slate-600 hover:bg-slate-100"}`}>
+                          My Applications
+                        </button>
+                        <button type="button" onClick={() => handleProtectedPane("profile")} className={`rounded-full px-4 py-2 text-sm font-semibold transition ${activePane === "profile" ? "bg-slate-900 text-white" : "bg-white text-slate-600 hover:bg-slate-100"}`}>
+                          My Profile
+                        </button>
+                      </div>
+                      <button type="button" onClick={() => setWorkspaceOpen(false)} className="rounded-full border border-slate-200 px-3 py-1 text-sm font-semibold text-slate-500 transition hover:border-slate-300 hover:text-slate-800">
+                        Close
                       </button>
                     </div>
                   </div>
@@ -1958,8 +2402,15 @@ export default function CareersPage() {
                                   </span>
                                 </div>
                                 {job?._id ? (
-                                  <button type="button" onClick={() => { setSelectedJobId(job._id); setActivePane("details"); }} className="mt-4 text-sm font-semibold text-cyan-700 hover:underline">
-                                    Open this role in the detail panel
+                                  <button
+                                    type="button"
+                                    onClick={() => {
+                                      setWorkspaceOpen(false);
+                                      openJobDialog(job._id);
+                                    }}
+                                    className="mt-4 text-sm font-semibold text-cyan-700 hover:underline"
+                                  >
+                                    Open full role details
                                   </button>
                                 ) : null}
                               </div>
@@ -2264,7 +2715,7 @@ export default function CareersPage() {
                     )
                   ) : null}
                 </div>
-              </div>
+              </ModalFrame>
             </div>
           )}
         </div>
