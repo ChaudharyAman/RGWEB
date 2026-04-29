@@ -654,6 +654,7 @@ function ApplyDialog({
   onClose,
   onRequireAuth,
   onApplied,
+  onViewApplications,
   apiRequest,
   announce,
 }) {
@@ -661,13 +662,15 @@ function ApplyDialog({
   const [submitting, setSubmitting] = useState(false);
   const [errors, setErrors] = useState({});
   const [usingProfileResume, setUsingProfileResume] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
 
   useEffect(() => {
     if (!isOpen) return;
     setForm(createApplyForm(applicant, profile));
     setErrors({});
     setUsingProfileResume(Boolean(profile?.resumeUrl));
-  }, [isOpen, applicant, profile]);
+    setSubmitted(false);
+  }, [isOpen, applicant, profile, job?._id]);
 
   if (!job) {
     return null;
@@ -744,7 +747,7 @@ function ApplyDialog({
 
       announce(data.message || "Application submitted successfully.", "success");
       await onApplied();
-      onClose();
+      setSubmitted(true);
     } catch (error) {
       announce(error.message, "error");
     } finally {
@@ -851,6 +854,52 @@ function ApplyDialog({
               </button>
               <button type="button" onClick={() => onRequireAuth("register")} className="btn-secondary">
                 Create Account
+              </button>
+            </div>
+          </div>
+        ) : submitted ? (
+          <div className="rounded-[28px] border border-emerald-200 bg-gradient-to-br from-emerald-50 via-white to-cyan-50 p-6">
+            <div className="inline-flex rounded-full bg-emerald-100 px-3 py-1 text-xs font-bold uppercase tracking-[0.22em] text-emerald-700">
+              Application Received
+            </div>
+            <h3 className="mt-4 text-3xl font-black text-slate-900">Welcome to the next step.</h3>
+            <p className="mt-3 text-sm leading-7 text-slate-600">
+              Your application for <span className="font-semibold text-slate-900">{job.publicJobTitle || job.roleDetails?.title}</span> has been shared with the hiring team.
+              We will review your profile and update your status in your applicant dashboard.
+            </p>
+
+            <div className="mt-6 grid gap-4 md:grid-cols-3">
+              <div className="rounded-[22px] border border-white bg-white p-4">
+                <p className="text-xs font-bold uppercase tracking-[0.2em] text-slate-400">Applied As</p>
+                <p className="mt-2 text-sm font-semibold text-slate-900">{form.candidateName || applicant?.firstName || "Applicant"}</p>
+              </div>
+              <div className="rounded-[22px] border border-white bg-white p-4">
+                <p className="text-xs font-bold uppercase tracking-[0.2em] text-slate-400">Tracking Email</p>
+                <p className="mt-2 text-sm font-semibold text-slate-900 break-all">{form.email || applicant?.email || "Saved to your account"}</p>
+              </div>
+              <div className="rounded-[22px] border border-white bg-white p-4">
+                <p className="text-xs font-bold uppercase tracking-[0.2em] text-slate-400">Next Update</p>
+                <p className="mt-2 text-sm font-semibold text-slate-900">Inside My Applications</p>
+              </div>
+            </div>
+
+            <div className="mt-6 rounded-[22px] border border-emerald-100 bg-white/90 p-4 text-sm leading-7 text-slate-600">
+              Keep your profile and resume updated to make future applications even faster. This submission is already saved to your applicant account.
+            </div>
+
+            <div className="mt-8 flex flex-wrap items-center gap-3">
+              <button
+                type="button"
+                onClick={() => {
+                  onClose();
+                  onViewApplications?.();
+                }}
+                className="btn-primary"
+              >
+                Open My Applications
+              </button>
+              <button type="button" onClick={onClose} className="btn-secondary">
+                Explore More Roles
               </button>
             </div>
           </div>
@@ -2738,6 +2787,10 @@ export default function CareersPage() {
           setAuthOpen(true);
         }}
         onApplied={refreshApplications}
+        onViewApplications={() => {
+          setWorkspaceOpen(true);
+          setActivePane("applications");
+        }}
         apiRequest={apiRequest}
         announce={announce}
       />
