@@ -730,6 +730,7 @@ function ApplyDialog({
       if (form.expectedCTC) payload.append("expectedCTC", form.expectedCTC);
       if (form.noticePeriod) payload.append("noticePeriod", form.noticePeriod);
       if (form.coverNote.trim()) payload.append("coverNote", form.coverNote.trim());
+      payload.append("source", "Resource Gateway");
 
       if (usingProfileResume && profile?.resumeUrl) {
         payload.append("useProfileResume", "true");
