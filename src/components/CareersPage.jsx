@@ -811,9 +811,16 @@ function ApplyDialog({
 
           <div className="mt-6">
             <h3 className="text-sm font-bold uppercase tracking-[0.22em] text-slate-500">Role Snapshot</h3>
-            <p className="mt-3 whitespace-pre-line text-sm leading-7 text-slate-600">
-              {job.publicJobDescription || job.jobDescription || "The hiring team has not added a public description for this role yet."}
-            </p>
+            {/<\/?[a-z][\s\S]*>/i.test(job.publicJobDescription || job.jobDescription || '') ? (
+              <div
+                className="mt-3 prose prose-slate max-w-none text-sm leading-7 text-slate-600 [&>ul]:list-disc [&>ul]:pl-5 [&>ol]:list-decimal [&>ol]:pl-5 [&>p]:mb-2 [&>h2]:text-base [&>h2]:font-bold [&>h3]:text-sm [&>h3]:font-bold"
+                dangerouslySetInnerHTML={{ __html: job.publicJobDescription || job.jobDescription }}
+              />
+            ) : (
+              <p className="mt-3 whitespace-pre-line text-sm leading-7 text-slate-600">
+                {job.publicJobDescription || job.jobDescription || "The hiring team has not added a public description for this role yet."}
+              </p>
+            )}
           </div>
 
           {allMustHaveSkills.length ? (
@@ -2339,9 +2346,16 @@ export default function CareersPage() {
 
                         <div className="mt-6">
                           <h3 className="text-sm font-bold uppercase tracking-[0.22em] text-slate-500">Role Snapshot</h3>
-                          <p className="mt-3 whitespace-pre-line text-sm leading-7 text-slate-600">
-                            {selectedJob.publicJobDescription || selectedJob.jobDescription || "The hiring team has not added a public description for this role yet."}
-                          </p>
+                          {/<\/?[a-z][\s\S]*>/i.test(selectedJob.publicJobDescription || selectedJob.jobDescription || '') ? (
+                            <div
+                              className="mt-3 prose prose-slate max-w-none text-sm leading-7 text-slate-600 [&>ul]:list-disc [&>ul]:pl-5 [&>ol]:list-decimal [&>ol]:pl-5 [&>p]:mb-2 [&>h2]:text-base [&>h2]:font-bold [&>h3]:text-sm [&>h3]:font-bold"
+                              dangerouslySetInnerHTML={{ __html: selectedJob.publicJobDescription || selectedJob.jobDescription }}
+                            />
+                          ) : (
+                            <p className="mt-3 whitespace-pre-line text-sm leading-7 text-slate-600">
+                              {selectedJob.publicJobDescription || selectedJob.jobDescription || "The hiring team has not added a public description for this role yet."}
+                            </p>
+                          )}
                         </div>
 
                         {allMustHaveSkills.length ? (
