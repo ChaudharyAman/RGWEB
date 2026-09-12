@@ -1,6 +1,8 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useMemo, useState } from "react";
 import GoogleIdentityButton from "./GoogleIdentityButton";
+import CountryPhoneInput from "./CountryPhoneInput";
+import { parsePhoneNumber, validatePhoneNumber } from "../utils/countries";
 import { resolvePublicApiBase } from "../lib/apiBase";
 
 const TOKEN_KEY = "applicant_token";
@@ -560,7 +562,12 @@ function AuthDialog({ isOpen, mode, onModeChange, onClose, apiRequest, onAuthSuc
             </div>
             <div>
               <label className="label-shell">Mobile Number</label>
-              <input className="input-shell" value={registerForm.mobile} onChange={(event) => setRegisterForm((current) => ({ ...current, mobile: event.target.value.replace(/\D/g, "").slice(0, 10) }))} />
+              <CountryPhoneInput
+                id="register-mobile"
+                name="mobile"
+                value={registerForm.mobile}
+                onChange={(formattedPhone) => setRegisterForm((current) => ({ ...current, mobile: formattedPhone }))}
+              />
             </div>
             <div>
               <label className="label-shell">Password</label>
@@ -693,8 +700,10 @@ function ApplyDialog({
       nextErrors.email = "Enter a valid email address.";
     }
 
-    if (!/^[6-9]\d{9}$/.test(form.mobile.trim())) {
-      nextErrors.mobile = "Enter a valid 10-digit mobile number.";
+    const parsedPhone = parsePhoneNumber(form.mobile);
+    const phoneError = validatePhoneNumber(parsedPhone.country, parsedPhone.nationalNumber, true);
+    if (phoneError) {
+      nextErrors.mobile = phoneError;
     }
 
     if (!usingProfileResume && !form.resume) {
@@ -938,8 +947,15 @@ function ApplyDialog({
               <FieldError message={errors.email} />
             </div>
             <div>
-              <label className="label-shell">Phone Number</label>
-              <input className="input-shell" value={form.mobile} onChange={(event) => setForm((current) => ({ ...current, mobile: event.target.value.replace(/\D/g, "").slice(0, 10) }))} />
+              <label className="label-shell">Phone Number*</label>
+              <CountryPhoneInput
+                id="careers-phone"
+                name="mobile"
+                value={form.mobile}
+                error={errors.mobile}
+                required
+                onChange={(formattedPhone) => setForm((current) => ({ ...current, mobile: formattedPhone }))}
+              />
               <FieldError message={errors.mobile} />
             </div>
             <div>
@@ -2511,7 +2527,12 @@ export default function CareersPage() {
                             </div>
                             <div>
                               <label className="label-shell">Mobile Number</label>
-                              <input className="input-shell" value={basicForm.mobile} onChange={(event) => setBasicForm((current) => ({ ...current, mobile: event.target.value.replace(/\D/g, "").slice(0, 10) }))} />
+                              <CountryPhoneInput
+                                id="profile-mobile"
+                                name="mobile"
+                                value={basicForm.mobile}
+                                onChange={(formattedPhone) => setBasicForm((current) => ({ ...current, mobile: formattedPhone }))}
+                              />
                             </div>
                             <div>
                               <label className="label-shell">Professional Headline</label>
