@@ -340,6 +340,14 @@ function AuthDialog({ isOpen, mode, onModeChange, onClose, apiRequest, onAuthSuc
 
   const handleRegister = async (event) => {
     event.preventDefault();
+    if (registerForm.mobile && registerForm.mobile.trim()) {
+      const parsedPhone = parsePhoneNumber(registerForm.mobile);
+      const phoneError = validatePhoneNumber(parsedPhone.country, parsedPhone.nationalNumber, false);
+      if (phoneError) {
+        announce(phoneError, "error");
+        return;
+      }
+    }
     try {
       setSubmitting(true);
       const data = await apiRequest("/api/public/applicant/register", {
@@ -1668,6 +1676,14 @@ export default function CareersPage() {
 
   const handleBasicSave = async () => {
     try {
+      if (basicForm.mobile && basicForm.mobile.trim()) {
+        const parsedPhone = parsePhoneNumber(basicForm.mobile);
+        const phoneError = validatePhoneNumber(parsedPhone.country, parsedPhone.nationalNumber, false);
+        if (phoneError) {
+          announce(phoneError, "error");
+          return;
+        }
+      }
       setProfileSaving("basic");
       const payload = await apiRequest("/api/public/applicant/profile/basic", {
         method: "PUT",
