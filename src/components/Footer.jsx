@@ -1,99 +1,145 @@
 export default function Footer() {
-  const footerLinks = {
-    "Company": ["About Us", "Careers", "Contact Us", "Privacy Policy"],
-    "Services": [
-      "Software Product Engineering",
-      "Dedicated Software Teams",
-      "QA & Testing",
-      "Application Development",
-      "Cloud Services",
-      "AI Solutions"
-    ],
-    "Solutions": [
-      "HR Management",
-      "Supply Chain",
-      "CRM",
-      "Web Portals",
-      "Document Management",
-      "E-Learning"
-    ],
-    "Technologies": [
-      "Web Technologies",
-      "Cloud",
-      "Mobility",
-      "ERP",
-      "Data Technologies",
-      "ETL"
-    ]
-  };
+  const companyLinks = [
+    { name: "About Us", href: "#about" },
+    { name: "Careers", href: "/careers" },
+    { name: "Contact Us", href: "mailto:lalit@resourcegateway.in" },
+    { name: "Privacy Policy", href: "#privacy" },
+  ];
+
+  const servicesLinks = [
+    { name: "Software Product Engineering", href: "#software-product-engineering" },
+    { name: "Dedicated Software Teams", href: "#dedicated-teams" },
+    { name: "QA & Testing", href: "#qa-testing" },
+    { name: "Application Development", href: "#app-development" },
+    { name: "Cloud Services", href: "#cloud-services" },
+    { name: "AI Solutions", href: "#ai" },
+  ];
+
+  const solutionsLinks = [
+    { name: "HR Management", href: "#hr-management" },
+    { name: "Supply Chain", href: "#supply-chain" },
+    { name: "CRM", href: "#crm" },
+    { name: "Web Portals", href: "#web-portals" },
+    { name: "Document Management", href: "#document-management" },
+    { name: "E-Learning", href: "#elearning" },
+  ];
+
+  const technologiesLinks = [
+    { name: "Web Technologies", href: "#web-technologies" },
+    { name: "Cloud", href: "#cloud-technologies" },
+    { name: "Mobility", href: "#mobility" },
+    { name: "ERP", href: "#erp-technologies" },
+    { name: "Data Technologies", href: "#data-technologies" },
+    { name: "ETL", href: "#etl-technologies" },
+  ];
 
   return (
-    <footer className="bg-gray-900 text-white py-12">
-      <div className="container mx-auto px-4">
-        {/* Single Row Layout */}
-        <div className="flex flex-col lg:flex-row gap-8 mb-8">
-          {/* Company Info - Left Side */}
-          <div className="lg:w-1/4">
-            <h3 className="text-2xl font-bold mb-4 bg-linear-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-              ResourceGateway
-            </h3>
-            <p className="text-gray-400 mb-6">
+    <footer className="bg-[#0b1120] text-white pt-16 pb-12 border-t border-slate-800/80">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8 lg:gap-10 mb-14">
+          {/* Brand Column */}
+          <div className="sm:col-span-2 lg:col-span-1">
+            <a href="/" className="inline-block text-xl sm:text-2xl font-bold tracking-tight mb-3">
+              <span className="text-[#38bdf8]">Resource</span>
+              <span className="text-[#818cf8]">Gateway</span>
+            </a>
+
+            <p className="text-slate-400 text-xs sm:text-sm leading-relaxed mb-6 font-normal max-w-xs">
               Crafting bespoke software solutions with cutting-edge technology and best practices.
             </p>
-            <div className="flex space-x-4">
-              <a href="https://www.linkedin.com/company/resource-gateway/" className="text-gray-400 hover:text-white transition-colors">
-                <span className="sr-only">LinkedIn</span>
-                <div className="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center">in</div>
-              </a>
-              {/* <a href="#" className="text-gray-400 hover:text-white transition-colors">
-                <span className="sr-only">Twitter</span>
-                <div className="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center">𝕏</div>
-              </a>
-              <a href="#" className="text-gray-400 hover:text-white transition-colors">
-                <span className="sr-only">Facebook</span>
-                <div className="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center">f</div>
-              </a>
-              <a href="#" className="text-gray-400 hover:text-white transition-colors">
-                <span className="sr-only">Instagram</span>
-                <div className="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center">ig</div>
-              </a> */}
-            </div>
+
+            <a
+              href="https://www.linkedin.com/company/resource-gateway/"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="LinkedIn"
+              className="w-8 h-8 rounded-md bg-white/10 hover:bg-[#38bdf8] flex items-center justify-center text-slate-300 hover:text-white transition-colors text-xs font-bold"
+            >
+              in
+            </a>
           </div>
 
-          {/* Links Grid - Right Side */}
-          <div className="lg:w-3/4">
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-8">
-              {Object.entries(footerLinks).map(([category, links]) => (
-                <div key={category}>
-                  <h4 className="font-bold text-lg mb-4 text-white">{category}</h4>
-                  <ul className="space-y-2">
-                    {links.map((link) => (
-                      <li key={link}>
-                        <a
-                          href="#"
-                          className="text-gray-400 hover:text-white transition-colors text-sm hover:pl-2 duration-200"
-                        >
-                          {link}
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
+          {/* Company Column */}
+          <div>
+            <h4 className="font-bold text-sm text-white mb-4">
+              Company
+            </h4>
+            <ul className="space-y-2.5">
+              {companyLinks.map((link) => (
+                <li key={link.name}>
+                  <a
+                    href={link.href}
+                    className="text-slate-400 hover:text-white transition-colors text-xs sm:text-sm block"
+                  >
+                    {link.name}
+                  </a>
+                </li>
               ))}
-            </div>
+            </ul>
+          </div>
+
+          {/* Services Column */}
+          <div>
+            <h4 className="font-bold text-sm text-white mb-4">
+              Services
+            </h4>
+            <ul className="space-y-2.5">
+              {servicesLinks.map((link) => (
+                <li key={link.name}>
+                  <a
+                    href={link.href}
+                    className="text-slate-400 hover:text-white transition-colors text-xs sm:text-sm block"
+                  >
+                    {link.name}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Solutions Column */}
+          <div>
+            <h4 className="font-bold text-sm text-white mb-4">
+              Solutions
+            </h4>
+            <ul className="space-y-2.5">
+              {solutionsLinks.map((link) => (
+                <li key={link.name}>
+                  <a
+                    href={link.href}
+                    className="text-slate-400 hover:text-white transition-colors text-xs sm:text-sm block"
+                  >
+                    {link.name}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Technologies Column */}
+          <div>
+            <h4 className="font-bold text-sm text-white mb-4">
+              Technologies
+            </h4>
+            <ul className="space-y-2.5">
+              {technologiesLinks.map((link) => (
+                <li key={link.name}>
+                  <a
+                    href={link.href}
+                    className="text-slate-400 hover:text-white transition-colors text-xs sm:text-sm block"
+                  >
+                    {link.name}
+                  </a>
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
 
-        {/* Copyright Section */}
-        <div className="border-t border-gray-800 pt-8">
-          <div className="flex flex-col md:flex-row justify-between items-center">
-            <p className="text-gray-400 text-sm mb-4 md:mb-0">
-              © 2025 ResourceGateway. All rights reserved.
-            </p>
-            <p className="text-gray-400 text-sm">
-              Recognized as one of the Top Custom Software Development Companies
-            </p>
-          </div>
+        {/* Bottom divider and copyright */}
+        <div className="border-t border-slate-800/80 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-slate-400">
+          <p>© 2025 ResourceGateway. All rights reserved.</p>
+          <p className="text-right">Recognized as one of the Top Custom Software Development Companies</p>
         </div>
       </div>
     </footer>

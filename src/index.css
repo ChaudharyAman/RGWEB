@@ -4,6 +4,15 @@
    THEME TOKENS
 =========================== */
 @theme {
+  --font-serif: "Playfair Display", Georgia, serif;
+  --font-sans: "Plus Jakarta Sans", Inter, system-ui, sans-serif;
+
+  --color-rg-navy: #07152b;
+  --color-rg-navy-light: #0f2244;
+  --color-rg-gold: #c89b4e;
+  --color-rg-gold-light: #d8a85e;
+  --color-rg-maroon: #80142a;
+
   --color-brand-teal: #1FB6C1;
   --color-brand-blue: #1E6FA8;
   --color-brand-indigo: #2D2F8F;
@@ -11,8 +20,8 @@
   --color-brand-pink: #C24A8E;
   --color-brand-lime: #B6D63A;
 
-  --color-bg-main: #F6F8FB;
-  --color-bg-dark: #0B1020;
+  --color-bg-main: #FFFFFF;
+  --color-bg-dark: #07152b;
 
   --color-text-primary: #0F172A;
   --color-text-secondary: #475569;
@@ -21,17 +30,30 @@
   --radius-xl: 1rem;
   --radius-2xl: 1.25rem;
 
-  --shadow-glass: 0 8px 32px rgba(31,182,193,0.25);
-  --shadow-card: 0 10px 30px rgba(15,23,42,0.1);
-  --shadow-glow: 0 0 40px rgba(30,111,168,0.4);
+  --shadow-glass: 0 8px 32px rgba(7, 21, 43, 0.12);
+  --shadow-card: 0 10px 30px rgba(15, 23, 42, 0.08);
+  --shadow-glow: 0 0 40px rgba(200, 155, 78, 0.35);
 }
 
 /* ===========================
-   BASE
+   BASE & SMOOTH SCROLL
 =========================== */
+html {
+  scroll-behavior: smooth !important;
+  scroll-padding-top: 5.25rem;
+}
+
+[id] {
+  scroll-margin-top: 5.25rem;
+}
+
 body {
-  @apply bg-[var(--color-bg-main)] text-[var(--color-text-primary)] antialiased;
-  font-family: Inter, system-ui, sans-serif;
+  @apply bg-white text-[var(--color-text-primary)] antialiased;
+  font-family: "Plus Jakarta Sans", Inter, system-ui, sans-serif;
+}
+
+.font-serif-display {
+  font-family: "Playfair Display", Georgia, serif;
 }
 
 /* ===========================

@@ -1,9 +1,7 @@
 import { motion } from "framer-motion";
 import { useState } from "react";
-import emailjs from "@emailjs/browser";
 
 export default function CTA() {
-
   const [form, setForm] = useState({
     name: "",
     phone: "",
@@ -11,134 +9,133 @@ export default function CTA() {
     requirements: ""
   });
 
-  const [loading, setLoading] = useState(false);
-
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (loading) return;
+    const recipient = "lalit@resourcegateway.in";
+    const subject = `Business Enquiry - ${form.name || "Client"}`;
+    const body = `Full Name: ${form.name}
+Phone Number: ${form.phone}
+Business Email: ${form.email}
 
-    setLoading(true);
+Project or Talent Requirements:
+${form.requirements || "N/A"}`;
 
-    try {
-      await emailjs.send(
-        import.meta.env.VITE_EMAIL_SERVICE,
-        import.meta.env.VITE_EMAIL_TEMPLATE,
-        {
-          name: form.name,
-          phone: form.phone,
-          email: form.email,
-          requirements: form.requirements,
-          time: new Date().toLocaleString()
-        },
-        import.meta.env.VITE_EMAIL_PUBLIC
-      );
+    const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(
+      recipient
+    )}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 
-      alert("Enquiry sent successfully 🚀");
-
-      setForm({
-        name: "",
-        phone: "",
-        email: "",
-        requirements: ""
-      });
-
-    } catch (err) {
-      console.error("EmailJS Error:", err);
-      alert("Failed to send enquiry 😬");
-    } finally {
-      setLoading(false);
-    }
+    window.open(gmailUrl, "_blank", "noopener,noreferrer");
   };
 
   return (
-    <section className="relative py-28 overflow-hidden bg-gray-50">
+    <section id="contact" className="relative py-12 sm:py-16 overflow-hidden bg-slate-50">
+      {/* Background ambient accents */}
+      <div className="absolute -top-32 -left-32 w-96 h-96 bg-[#07152b]/5 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute -bottom-32 -right-32 w-96 h-96 bg-[#c89b4e]/10 rounded-full blur-3xl pointer-events-none" />
 
-      {/* Logo-inspired soft background flows */}
-      <div className="absolute -top-40 -left-40 w-130 h-130 bg-cyan-300/30 rounded-full blur-3xl" />
-      <div className="absolute top-1/2 -right-40 w-130 h-130 bg-indigo-300/30 rounded-full blur-3xl" />
-      <div className="absolute -bottom-40 left-1/3 w-130 h-130 bg-fuchsia-300/30 rounded-full blur-3xl" />
-
-      <div className="container mx-auto px-4 relative z-10">
-        <div className="max-w-5xl mx-auto text-center">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 relative z-10">
+        <div className="text-center max-w-3xl mx-auto">
+          <div className="inline-flex items-center gap-2 text-xs font-semibold tracking-[0.25em] text-[#80142a] uppercase mb-2.5">
+            <span>START A CONVERSATION</span>
+          </div>
 
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
-            className="text-3xl md:text-4xl font-bold mb-6 bg-linear-to-r from-cyan-500 via-indigo-500 to-fuchsia-500 bg-clip-text text-transparent"
+            className="text-3xl sm:text-4xl lg:text-[40px] font-bold font-serif-display text-slate-900 mb-3"
           >
-            Transform Your Business Today
+            Ready to Build What’s <span className="text-[#c89b4e]">Next?</span>
           </motion.h2>
 
-          <p className="text-lg md:text-xl text-gray-700 mb-14 max-w-3xl mx-auto">
-            Discover bespoke IT solutions for unparalleled business growth.
+          <p className="text-base sm:text-lg text-slate-600 mb-8 max-w-2xl mx-auto">
+            Speak with our enterprise consultants to align the right engineering talent and technology architecture for your organization.
           </p>
 
-          {/* Inline form */}
+          {/* Form */}
           <motion.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            transition={{ duration: 0.6, delay: 0.3 }}
+            initial={{ opacity: 0, y: 15 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
             viewport={{ once: true }}
-            className="max-w-4xl mx-auto"
+            className="bg-white p-8 sm:p-10 rounded-2xl shadow-xl border border-gray-100 text-left"
           >
+            <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-5">
+              <div>
+                <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-2">
+                  Full Name *
+                </label>
+                <input
+                  name="name"
+                  value={form.name}
+                  onChange={handleChange}
+                  required
+                  placeholder="e.g. Rahul Sharma"
+                  className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 focus:outline-none focus:border-[#c89b4e] focus:bg-white transition-all text-sm"
+                />
+              </div>
 
-            <form
-              onSubmit={handleSubmit}
-              className="grid grid-cols-1 md:grid-cols-2 gap-6"
-            >
+              <div>
+                <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-2">
+                  Phone Number *
+                </label>
+                <input
+                  name="phone"
+                  value={form.phone}
+                  onChange={handleChange}
+                  required
+                  placeholder="e.g. +91 98186 48467"
+                  className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 focus:outline-none focus:border-[#c89b4e] focus:bg-white transition-all text-sm"
+                />
+              </div>
 
-              <input
-                name="name"
-                value={form.name}
-                onChange={handleChange}
-                required
-                placeholder="Full Name*"
-                className="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg focus:outline-none focus:border-cyan-500"
-              />
+              <div className="md:col-span-2">
+                <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-2">
+                  Business Email *
+                </label>
+                <input
+                  type="email"
+                  name="email"
+                  value={form.email}
+                  onChange={handleChange}
+                  required
+                  placeholder="e.g. name@company.com"
+                  className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 focus:outline-none focus:border-[#c89b4e] focus:bg-white transition-all text-sm"
+                />
+              </div>
 
-              <input
-                name="phone"
-                value={form.phone}
-                onChange={handleChange}
-                required
-                placeholder="Phone Number*"
-                className="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg focus:outline-none focus:border-indigo-500"
-              />
+              <div className="md:col-span-2">
+                <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-2">
+                  Project or Talent Requirements
+                </label>
+                <textarea
+                  name="requirements"
+                  value={form.requirements}
+                  onChange={handleChange}
+                  placeholder="Describe your goals, team scale, or required tech stack..."
+                  rows="3"
+                  className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 focus:outline-none focus:border-[#c89b4e] focus:bg-white transition-all text-sm resize-none"
+                />
+              </div>
 
-              <input
-                name="email"
-                value={form.email}
-                onChange={handleChange}
-                placeholder="Email"
-                className="md:col-span-2 w-full px-4 py-3 bg-white border border-gray-300 rounded-lg focus:outline-none focus:border-fuchsia-500"
-              />
-
-              <textarea
-                name="requirements"
-                value={form.requirements}
-                onChange={handleChange}
-                placeholder="Requirements"
-                rows="3"
-                className="md:col-span-2 w-full px-4 py-3 bg-white border border-gray-300 rounded-lg focus:outline-none focus:border-indigo-500"
-              />
-
-              <button
-                type="submit"
-                disabled={loading}
-                className="md:col-span-2 mt-2 px-12 py-4 rounded-xl font-semibold text-white bg-linear-to-r from-cyan-500 via-indigo-500 to-fuchsia-500 hover:shadow-xl hover:shadow-fuchsia-400/30 transition-all duration-200 disabled:opacity-60"
-              >
-                {loading ? "Sending..." : "Enquire Now"}
-              </button>
-
+              <div className="md:col-span-2 mt-2 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <p className="text-xs text-slate-500">
+                  Your information is encrypted & protected under enterprise NDA standards.
+                </p>
+                <button
+                  type="submit"
+                  className="w-full sm:w-auto px-8 py-3.5 rounded-xl font-semibold text-white bg-[#80142a] hover:bg-[#681022] shadow-md transition-all duration-200 cursor-pointer text-sm"
+                >
+                  Submit Enquiry →
+                </button>
+              </div>
             </form>
-
           </motion.div>
         </div>
       </div>
