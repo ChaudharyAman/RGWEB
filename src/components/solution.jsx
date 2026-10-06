@@ -101,12 +101,9 @@ export default function Solutions() {
               className="p-5.5 rounded-xl border border-gray-200/90 bg-white hover:border-[#c89b4e] hover:shadow-md transition-all duration-300 group flex flex-col justify-between"
             >
               <div>
-                <div className="flex items-center justify-between mb-4">
+                <div className="mb-4">
                   <span className="w-9 h-9 rounded-lg bg-[#07152b] text-white flex items-center justify-center font-bold text-sm tracking-wider group-hover:bg-[#80142a] transition-colors">
                     {solution.code}
-                  </span>
-                  <span className="text-slate-300 group-hover:text-[#c89b4e] transition-colors text-xs font-semibold">
-                    →
                   </span>
                 </div>
 

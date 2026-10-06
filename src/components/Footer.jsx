@@ -2,7 +2,12 @@ export default function Footer() {
   const companyLinks = [
     { name: "About Us", href: "#about" },
     { name: "Careers", href: "/careers" },
-    { name: "Contact Us", href: "mailto:lalit@resourcegateway.in" },
+    {
+      name: "Contact Us",
+      href: "https://mail.google.com/mail/?view=cm&fs=1&to=lalit@resourcegateway.in&su=Resource%20Gateway%20Enquiry",
+      target: "_blank",
+      rel: "noopener noreferrer",
+    },
     { name: "Privacy Policy", href: "#privacy" },
   ];
 
@@ -39,14 +44,48 @@ export default function Footer() {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8 lg:gap-10 mb-14">
           {/* Brand Column */}
           <div className="sm:col-span-2 lg:col-span-1">
-            <a href="/" className="inline-block text-xl sm:text-2xl font-bold tracking-tight mb-3">
-              <span className="text-[#38bdf8]">Resource</span>
-              <span className="text-[#818cf8]">Gateway</span>
+            <a
+              href="#hero"
+              className="inline-block mb-5 hover:opacity-90 transition-opacity"
+            >
+              <img
+                src="/logo-footer.png"
+                alt="Resource Gateway"
+                className="h-12 sm:h-14 w-auto object-contain rounded-lg"
+              />
             </a>
 
-            <p className="text-slate-400 text-xs sm:text-sm leading-relaxed mb-6 font-normal max-w-xs">
+            <p className="text-slate-400 text-xs sm:text-sm leading-relaxed mb-4 font-normal max-w-xs">
               Crafting bespoke software solutions with cutting-edge technology and best practices.
             </p>
+
+            <a
+              href="https://maps.google.com/?q=C+-+5%2F25%2C+First+Floor%2C+Sector-+52%2C+Gurgaon%2C+Haryana%2C+India+-+122003"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group flex items-start gap-2.5 text-slate-400 hover:text-white transition-colors text-xs sm:text-sm leading-relaxed mb-6 max-w-xs"
+            >
+              <svg
+                className="w-4 h-4 text-[#38bdf8] group-hover:text-[#818cf8] shrink-0 mt-0.5 transition-colors"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth="2"
+                aria-hidden="true"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+                />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                />
+              </svg>
+              <span>C - 5/25, First Floor, Sector- 52, Gurgaon, Haryana, India - 122003</span>
+            </a>
 
             <a
               href="https://www.linkedin.com/company/resource-gateway/"

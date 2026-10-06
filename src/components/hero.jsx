@@ -236,7 +236,9 @@ export default function Hero() {
 
               <div className="p-6 space-y-4">
                 <a
-                  href={`mailto:${email}?subject=Resource%20Gateway%20Expert%20Consultation`}
+                  href={`https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(email)}&su=${encodeURIComponent("Resource Gateway Expert Consultation")}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="flex items-center p-4 border border-gray-200 rounded-xl hover:border-[#c89b4e] hover:bg-amber-50/40 transition-all group"
                   onClick={() => setIsModalOpen(false)}
                 >
