@@ -84,7 +84,7 @@ export default function Footer() {
                   d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
                 />
               </svg>
-              <span>C - 5/25, First Floor, Sector- 52, Gurgaon, Haryana, India - 122003</span>
+              <span>Sector- 52, Gurgaon, Haryana, India - 122003</span>
             </a>
 
             <a
