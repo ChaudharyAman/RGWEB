@@ -59,14 +59,9 @@ export default function Footer() {
               Crafting bespoke software solutions with cutting-edge technology and best practices.
             </p>
 
-            <a
-              href="https://maps.google.com/?q=C+-+5%2F25%2C+First+Floor%2C+Sector-+52%2C+Gurgaon%2C+Haryana%2C+India+-+122003"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group flex items-start gap-2.5 text-slate-400 hover:text-white transition-colors text-xs sm:text-sm leading-relaxed mb-6 max-w-xs"
-            >
+            <div className="flex items-start gap-2.5 text-slate-400 text-xs sm:text-sm leading-relaxed mb-6 max-w-xs">
               <svg
-                className="w-4 h-4 text-[#38bdf8] group-hover:text-[#818cf8] shrink-0 mt-0.5 transition-colors"
+                className="w-4 h-4 text-[#38bdf8] shrink-0 mt-0.5"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -85,7 +80,7 @@ export default function Footer() {
                 />
               </svg>
               <span>Sector- 52, Gurgaon, Haryana, India - 122003</span>
-            </a>
+            </div>
 
             <a
               href="https://www.linkedin.com/company/resource-gateway/"
