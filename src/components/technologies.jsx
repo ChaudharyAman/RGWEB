@@ -4,79 +4,85 @@ const technologies = [
   {
     name: "Cloud",
     id: "cloud-technologies",
-    description: "Access to scalable resources, storage, and services"
+    code: "C",
+    description: "Access to scalable resources, storage, and services",
   },
   {
     name: "Mobility",
     id: "mobility",
-    description: "Mobility refers to the ability to access and use information"
+    code: "M",
+    description: "Mobility refers to the ability to access and use information",
   },
   {
     name: "Web Technologies",
     id: "web-technologies",
-    description: "Seamless online communication, collaboration, and IT"
+    code: "W",
+    description: "Seamless online communication, collaboration, and IT",
   },
   {
     name: "ERP",
     id: "erp-technologies",
-    description: "Integrates core business processes and functions"
+    code: "E",
+    description: "Integrates core business processes and functions",
   },
   {
     name: "Data Technologies",
     id: "data-technologies",
-    description: "Advanced data processing and analytics solutions"
+    code: "D",
+    description: "Advanced data processing and analytics solutions",
   },
   {
     name: "ETL Technologies",
     id: "etl-technologies",
-    description: "Efficient data extraction, transformation, and loading"
-  }
+    code: "E",
+    description: "Efficient data extraction, transformation, and loading",
+  },
 ];
 
 export default function Technologies() {
   return (
-    <section id="technologies" className="section py-16 bg-gray-50">
-      <div className="container mx-auto px-4">
-        <div className="text-center mb-12">
+    <section id="technologies" className="py-12 sm:py-16 bg-white border-t border-gray-100">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center max-w-3xl mx-auto mb-9">
           <motion.h2
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 18 }}
             whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
+            transition={{ duration: 0.5 }}
             viewport={{ once: true }}
-            className="text-3xl md:text-4xl font-bold mb-4"
+            className="text-3xl sm:text-4xl font-bold font-serif-display text-slate-900 mb-4"
           >
-            Technologies We <span className="bg-linear-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Use</span>
+            Technologies We <span className="text-[#c89b4e]">Master</span>
           </motion.h2>
-          <p className="text-gray-600 max-w-2xl mx-auto">
-            Get what you are looking for to fulfill your software development and outsourcing needs at ResourceGateway, with our expertise on all in-demand technologies & platforms.
+
+          <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
+            From modern cloud architectures to enterprise ERPs and cutting-edge data solutions, we deliver engineering proficiency across all in-demand platforms.
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {technologies.map((tech, index) => (
             <motion.div
               key={tech.name}
               id={tech.id}
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 18 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
+              transition={{ duration: 0.35, delay: index * 0.05 }}
               viewport={{ once: true }}
-              whileHover={{ y: -5 }}
-              className="bg-white p-8 rounded-xl shadow-sm hover:shadow-lg transition-all duration-300"
+              className="bg-white p-6 sm:p-7 rounded-2xl border border-gray-200/90 shadow-xs hover:border-[#c89b4e] hover:shadow-md transition-all duration-300 group hover:-translate-y-0.5"
             >
-              <div className="w-16 h-16 bg-linear-to-r from-blue-500 to-purple-500 rounded-xl mb-6 flex items-center justify-center">
-                <span className="text-white text-2xl font-bold">{tech.name.charAt(0)}</span>
+              <div className="w-9 h-9 rounded-lg bg-[#07152b] text-white flex items-center justify-center font-bold text-sm tracking-wider group-hover:bg-[#80142a] transition-colors mb-4">
+                {tech.code}
               </div>
-              <h3 className="text-xl font-bold mb-3">{tech.name}</h3>
-              <p className="text-gray-600">{tech.description}</p>
+
+              <h3 className="text-base sm:text-lg font-bold text-slate-900 mb-2 group-hover:text-[#80142a] transition-colors">
+                {tech.name}
+              </h3>
+
+              <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-normal">
+                {tech.description}
+              </p>
             </motion.div>
           ))}
-        </div>
-
-        <div className="text-center mt-12">
-          {/* <button className="bg-linear-to-r from-blue-600 to-purple-600 text-white px-8 py-3 rounded-lg font-semibold hover:shadow-lg hover:shadow-blue-500/25 transition-all duration-200">
-            View All Technologies
-          </button> */}
         </div>
       </div>
     </section>

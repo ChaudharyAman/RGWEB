@@ -8,7 +8,7 @@ export const resolvePublicApiBase = () => {
   }
 
   if (typeof window !== 'undefined' && /^(localhost|127\.0\.0\.1)$/i.test(window.location.hostname)) {
-    return 'http://localhost:2000';
+    return 'http://localhost:5001';
   }
 
   return 'https://api.talentcio.in';
