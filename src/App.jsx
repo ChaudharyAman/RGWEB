@@ -11,6 +11,8 @@ import CTA from './components/cta'
 import Footer from './components/Footer'
 import PrivacyBanner from './components/PrivacyBanner'
 import CareersPage from './components/CareersPage'
+import HRManagement from './components/HRManagement'
+import WorkforceManagement from './components/WorkforceManagement'
 
 const getCurrentPath = () => {
   if (typeof window === 'undefined') {
@@ -89,6 +91,8 @@ function App() {
   }, [currentPath])
 
   const isCareersPage = currentPath === '/careers'
+  const isHRPage = currentPath === '/solutions/hr-management'
+  const isWorkforcePage = currentPath === '/solutions/workforce-management'
 
   return (
     <div className="relative overflow-x-hidden bg-white min-h-screen text-slate-800">
@@ -97,6 +101,10 @@ function App() {
 
       {isCareersPage ? (
         <CareersPage />
+      ) : isHRPage ? (
+        <HRManagement />
+      ) : isWorkforcePage ? (
+        <WorkforceManagement />
       ) : (
         <main>
           <Hero />

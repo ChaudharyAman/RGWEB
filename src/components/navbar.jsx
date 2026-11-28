@@ -50,12 +50,21 @@ export default function Navbar({ currentPath = "/" }) {
     setActiveMobileDropdown(activeMobileDropdown === name ? null : name);
   };
 
-  const resolveHref = (href) => {
-    if (href.startsWith("#")) {
-      return currentPath === "/careers" ? `/${href}` : href;
+  
+const resolveHref = (href) => {
+  if (href.startsWith("#")) {
+    // Homepage: scroll to section on the same page
+    if (currentPath === "/") {
+      return href;
     }
-    return href;
-  };
+
+    // Other pages: navigate to homepage section
+    return `/${href}`;
+  }
+
+  return href;
+};
+
 
   const navItems = [
     {

@@ -5,7 +5,8 @@ const solutions = [
     title: "Human Resource Management",
     id: "hr-management",
     code: "H",
-    desc: "Professional human resource management solutions tailored for business efficiency.",
+    desc: "Professional Human Resource solutions for staffing recruiting companies, covering recruitment consent and workforce needs.",
+    link: "/solutions/hr-management",
   },
   {
     title: "Supply Chain Management",
@@ -29,19 +30,20 @@ const solutions = [
     title: "Workforce Management",
     id: "workforce-management",
     code: "W",
-    desc: "Professional workforce management solutions tailored for business efficiency.",
+    desc: "Efficient workforce management solutions for staffing recruiting companies, designed to optimize business operations.",
+    link: "/solutions/workforce-management",
   },
   {
     title: "CRM Solutions",
     id: "crm",
     code: "C",
-    desc: "Professional crm solutions tailored for business efficiency.",
+    desc: "Smart CRM solutions for staffing recruiting companies to manage client relationships and recruitment activities.",
   },
   {
     title: "Web Portals",
     id: "web-portals",
     code: "W",
-    desc: "Professional web portals solutions tailored for business efficiency.",
+    desc: "Custom web portals for staffing recruiting companies, simplifying recruitment processes and business communication.",
   },
   {
     title: "Content Management System",
@@ -53,7 +55,7 @@ const solutions = [
     title: "Document Management",
     id: "document-management",
     code: "D",
-    desc: "Professional document management solutions tailored for business efficiency.",
+    desc: "Secure document management solutions supporting recruitment consent, organized records, and efficient workflows.",
   },
   {
     title: "E-Learning Solutions",
@@ -71,7 +73,10 @@ const solutions = [
 
 export default function Solutions() {
   return (
-    <section id="solutions" className="py-12 sm:py-16 bg-white border-t border-gray-100">
+    <section
+      id="solutions"
+      className="py-12 sm:py-16 bg-white border-t border-gray-100"
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-3xl mx-auto mb-9">
           <motion.h2
@@ -85,7 +90,9 @@ export default function Solutions() {
           </motion.h2>
 
           <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
-            Drawing on our software proficiency, we architect dynamic, dependable, and resilient tech solutions, bolstering businesses across diverse landscapes.
+            Drawing on our software proficiency, we architect dynamic,
+            dependable, and resilient tech solutions, bolstering businesses
+            across diverse landscapes.
           </p>
         </div>
 
@@ -98,7 +105,14 @@ export default function Solutions() {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.35, delay: index * 0.03 }}
               viewport={{ once: true }}
-              className="p-5.5 rounded-xl border border-gray-200/90 bg-white hover:border-[#c89b4e] hover:shadow-md transition-all duration-300 group flex flex-col justify-between"
+              onClick={() => {
+                if (solution.link) {
+                  window.location.href = solution.link;
+                }
+              }}
+              className={`p-5.5 rounded-xl border border-gray-200/90 bg-white hover:border-[#c89b4e] hover:shadow-md transition-all duration-300 group flex flex-col justify-between ${
+                solution.link ? "cursor-pointer" : ""
+              }`}
             >
               <div>
                 <div className="mb-4">
